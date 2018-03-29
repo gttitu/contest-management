@@ -18,3 +18,9 @@ Ce projet sera divise sur les differents modules suivant :
 * Module de centre d'examen
 * Module de note
 * Module de deliberation
+
+## Les membres du groupe ( Pseudo facebook )
+
+* Aro Toavina
+* Tefy Rak
+* Gimmy Razafimbelo
