@@ -4,8 +4,8 @@ public class TableCondition {
 	
 	// ATTRIBUTES :
 	
-	private Integer id;
-	private String query;
+	protected Integer id;
+	protected String query;
 	
 	// CONSTRUCTS :
 	
