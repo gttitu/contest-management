@@ -1,4 +1,4 @@
-# Convention de nommage des packages
+# Convention pour les packages
 
 On prendra ici , pour exemple , le nom du module : "Center" .
 

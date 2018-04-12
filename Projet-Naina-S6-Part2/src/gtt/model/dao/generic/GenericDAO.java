@@ -1,9 +1,10 @@
-package gtt.model.dao;
+package gtt.model.dao.generic;
 
 import java.util.List;
 
 import gtt.model.BaseModel;
 import gtt.model.TableCondition;
+import gtt.model.dao.InterfaceDAO;
 
 public class GenericDAO implements InterfaceDAO {
 	
