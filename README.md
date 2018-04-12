@@ -2,7 +2,7 @@
 
 ## Definition
 
-Ce projet est un projet universitaire , comme son nom l'indiquem , sur la gestion de concours en tout genre.
+Ce projet est un projet universitaire , comme son nom l'indique , sur la gestion de concours en tout genre.
 
 ## Interet
 
