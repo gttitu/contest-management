@@ -36,6 +36,11 @@ public class TableCondition {
 
 	public String getQuery() { return query; }
 
-	public void setQuery(String query) { this.query = query; }
+	public void setQuery(String query) { 
+		if(query != null)
+			this.query = " " + query;
+		else
+			this.query = "";
+	}
 
 }
