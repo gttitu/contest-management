@@ -9,16 +9,16 @@ public interface InterfaceDAO {
 	
 	// METHODS TO INHERIT :
 	
-	BaseModel save(BaseModel model);
+	int save(BaseModel model) throws Exception;
 	
-	BaseModel update(BaseModel model);
+	int update(BaseModel model) throws Exception;
 	
-	void delete(TableCondition condition);
+	int delete(TableCondition condition) throws Exception;
 	
-	BaseModel findById(TableCondition condition);
+	BaseModel findById(TableCondition condition) throws Exception;
 	
-	List<BaseModel> findAll(TableCondition condition);
+	List<BaseModel> findAll(TableCondition condition) throws Exception;
 	
-	List<BaseModel> findAll(int page, int row, TableCondition condition);
+	List<BaseModel> findAll(int page, int row, TableCondition condition) throws Exception;
 
 }
