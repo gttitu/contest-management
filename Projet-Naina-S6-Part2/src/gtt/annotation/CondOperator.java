@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TableAttr {
+public @interface CondOperator {
 	
-	String name();
+	String term();
 
 }

@@ -1,5 +1,6 @@
 package gtt.test;
 
+import gtt.annotation.CondOperator;
 import gtt.annotation.DbTable;
 import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
@@ -14,6 +15,7 @@ public class Voiture extends BaseModel {
 	private Integer marque;
 	
 	@TableAttr(name="modele")
+	@CondOperator(term = "LIKE")
 	private String modele;
 	
 	// CONSTRUCTS :
