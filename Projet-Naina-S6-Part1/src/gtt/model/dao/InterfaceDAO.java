@@ -3,22 +3,21 @@ package gtt.model.dao;
 import java.util.List;
 
 import gtt.model.BaseModel;
-import gtt.model.TableCondition;
 
 public interface InterfaceDAO {
 	
 	// METHODS TO INHERIT :
 	
-	BaseModel save(BaseModel model);
+	int save(BaseModel model) throws Exception;
 	
-	BaseModel update(BaseModel model);
+	int update(BaseModel model) throws Exception;
 	
-	void delete(TableCondition condition);
+	int delete(BaseModel model) throws Exception;
 	
-	BaseModel findById(TableCondition condition);
+	void findById(BaseModel model) throws Exception;
 	
-	List<BaseModel> findAll(TableCondition condition);
+	List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception;
 	
-	List<BaseModel> findAll(int page, int row, TableCondition condition);
+	List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception;
 
 }

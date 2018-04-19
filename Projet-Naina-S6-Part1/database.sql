@@ -28,5 +28,3 @@ CREATE TABLE Center (
 	PRIMARY KEY (id),
 	FOREIGN KEY(idContest) REFERENCES Contest(id),
 )Engine=InnoDB;
-
-

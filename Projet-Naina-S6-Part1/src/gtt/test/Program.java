@@ -7,9 +7,11 @@ public class Program {
 	public static void main(String[] args) {
 		
 		java.sql.Connection connection = initConnection();
+		System.out.println("**************************************************");
 		
 		
 		
+		System.out.println("**************************************************");
 		Connection.close(connection);
 		
 	}
