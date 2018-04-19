@@ -15,10 +15,17 @@ public class Program {
 		System.out.println("**********************************************");
 		
 		GenericDAO dao = new GenericDAO(connection, true);
-		//String query = null;
 		try {
 			
-			Voiture v = new Voiture(1, 1, "Terios");
+			/*Voiture v = new Voiture();
+			v.setModele("Ter%");
+			List<Voiture> voitures = convertToVoiture(dao.findAll(v, null));
+			listVoitures(voitures);*/
+			
+			//Marque m = new Marque("Peugeot");
+			//dao.save(m);
+			
+			Voiture v = new Voiture(3, 2, "18");
 			dao.update(v);
 			
 		} catch (Exception e) {

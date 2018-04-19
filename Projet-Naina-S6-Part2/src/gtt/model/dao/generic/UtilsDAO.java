@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import gtt.annotation.CondOperator;
 import gtt.annotation.DbTable;
 import gtt.annotation.NotTableAttr;
 import gtt.annotation.TableAttr;
@@ -14,6 +15,27 @@ import gtt.model.BaseModel;
 public class UtilsDAO {
 	
 	// STATIC METHODS :
+	
+	public static String getCondOperand(Field attribute) {
+		
+		if(attribute.isAnnotationPresent(CondOperator.class))
+			return attribute.getAnnotation(CondOperator.class).term();
+		else
+			return "=";
+		
+	}
+	
+	public static Object getValueOf(BaseModel model, Field attribute) throws Exception {
+		
+		Object result = null;
+		
+		Method getter = getGetter(model, attribute.getName());
+		Object[] params = null;
+		result = getter.invoke(model, params);
+		
+		return result;
+		
+	}
 	
 	protected static List<Field> sort(List<Field> fields){
 		
@@ -135,6 +157,20 @@ public class UtilsDAO {
 			
 			DbTable table = modelClass.getAnnotation(DbTable.class);
 			result = table.name();
+			
+		} return result;
+		
+	}
+	
+	public static List<Field> getAttrNotNull(BaseModel model, List<Field> attributes) throws Exception{
+		
+		List<Field> result = new ArrayList<>();
+		
+		for(Field f : attributes) {
+			
+			Object tmp = getValueOf(model, f);
+			if(tmp != null)
+				result.add(f);
 			
 		} return result;
 		

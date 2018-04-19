@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gtt.model.BaseModel;
-import gtt.model.GenericCondition;
-import gtt.model.TableCondition;
-import gtt.model.dao.DaoException;
 import gtt.model.dao.InterfaceDAO;
 
 public class GenericDAO implements InterfaceDAO {
@@ -48,7 +45,7 @@ public class GenericDAO implements InterfaceDAO {
 		List<Field> attributes = UtilsDAO.getAttributesWithoutId(model);
 		String query = this.buildInsert(tablename, attributes);
 		
-		return this.executeUpdate(model, query, attributes);
+		return this.executeSave(model, query, attributes);
 		
 	}
 	
@@ -104,7 +101,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
-	protected int executeUpdate(BaseModel model, String query, List<Field> attributes) throws Exception {
+	protected int executeSave(BaseModel model, String query, List<Field> attributes) throws Exception {
 		
 		int result = -1;
 		
@@ -120,13 +117,29 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
+	protected int executeUpdate(BaseModel model, String query, List<Field> attributes) throws Exception {
+		
+		int result = -1;
+		
+		PreparedStatement stm = this.connection.prepareStatement(query);
+		for(int i = 0, size = attributes.size(); i < size; i++) {
+			
+			Object value = this.getValueOf(model, attributes.get(i));
+			stm.setObject((i+1), value);
+			
+		} stm.setObject(attributes.size() + 1, model.getId());
+		
+		result = stm.executeUpdate(); return result;
+		
+	}
+	
 	protected int simpleSave(BaseModel model) throws Exception{
 		
 		String tablename = UtilsDAO.getTableName(model.getClass());
 		List<Field> attributes = UtilsDAO.getAttributes(model);
 		String query = this.buildInsert(tablename, attributes);
 		
-		return this.executeUpdate(model, query, attributes);
+		return this.executeSave(model, query, attributes);
 		
 	}
 
@@ -158,11 +171,11 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
-	protected String buildUpdate(String tablename, List<Field> attributes, Integer id) {
+	protected String buildUpdate(String tablename, List<Field> attributes) {
 		
 		String query1 = "UPDATE " + tablename + " ";
 		String query2 = this.prepareUpdate(attributes);
-		String query3 = " WHERE id = " + id;
+		String query3 = " WHERE id = ?";
 		
 		return query1 + query2 + query3;
 		
@@ -173,54 +186,50 @@ public class GenericDAO implements InterfaceDAO {
 
 		String tablename = UtilsDAO.getTableName(model.getClass());
 		List<Field> attributes = UtilsDAO.getAttributesWithoutId(model);
-		String query = this.buildUpdate(tablename, attributes, model.getId());
+		String query = this.buildUpdate(tablename, attributes);
 		
 		return this.executeUpdate(model, query, attributes);
 		
 	}
 	
-	protected int genericDelete(GenericCondition condition) throws Exception {
+	@Override
+	public int delete(BaseModel model) throws Exception {
 		
-		String query = "DELETE FROM " + UtilsDAO.getTableName(condition.getModelClass());
-		if(condition.getId() == null)
-			query += condition.getQuery();
-		else
-			query += " WHERE id = " + condition.getId();
+		String query = "DELETE FROM " + UtilsDAO.getTableName(model.getClass()) + " WHERE id = ?";
 		PreparedStatement stm = this.connection.prepareStatement(query);
+		stm.setObject(1, model.getId());
 		
 		return stm.executeUpdate();
 		
 	}
-
-	@Override
-	public int delete(TableCondition condition) throws Exception {
+	
+	protected void mapById(BaseModel model, BaseModel tmp) throws Exception {
 		
-		int result = -1;
-		
-		if(condition instanceof GenericCondition) {
+		List<Field> attributes = UtilsDAO.getAttributesWithoutId(model);
+		for(Field f : attributes) {
 			
-			GenericCondition cond = (GenericCondition)condition;
-			result = this.genericDelete(cond);
-		
-		} else {
+			Method getter = UtilsDAO.getGetter(tmp, f.getName());
+			Object params = null;
+			Object returned = getter.invoke(tmp, params);
+			if(returned != null) {
+				
+				Method setter = UtilsDAO.getSetter(model, f.getName());
+				setter.invoke(model, returned);
+				
+			}
 			
-			throw new DaoException("You must use generic condition with this generic DAO !");
-			
-		} return result;
+		}
 		
 	}
 
 	@Override
-	public BaseModel findById(TableCondition condition) throws Exception {
+	public void findById(BaseModel model) throws Exception {
 		
-		BaseModel result = null;
-		
-		condition.setQuery("WHERE id = " + condition.getId());
-		List<BaseModel> models = this.findAll(condition);
-		if(models.size() == 1)
-			result = models.get(0);
-		
-		return result;
+		List<BaseModel> models = this.findAll(model, null);
+		if(models != null && models.size() == 1){
+			BaseModel tmp = models.get(0);
+			this.mapById(model, tmp);
+		}
 		
 	}
 	
@@ -255,40 +264,112 @@ public class GenericDAO implements InterfaceDAO {
 		} return result;
 		
 	}
-	
-	protected List<BaseModel> genericFindAll(GenericCondition condition) throws Exception{
+
+	@Override
+	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception {
 		
-		String query = "SELECT * FROM " + UtilsDAO.getTableName(condition.getModelClass()) + condition.getQuery();
+		String query = "SELECT * FROM " + UtilsDAO.getTableName(baseCond.getClass()) + this.buildCondition(baseCond, specCond);
 		PreparedStatement stm = this.connection.prepareStatement(query);
 		
-		return this.mapAll(condition.getModelClass(), stm);
+		return this.mapAll(baseCond.getClass(), stm);
 		
 	}
 
 	@Override
-	public List<BaseModel> findAll(TableCondition condition) throws Exception {
+	public List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
 		
-		List<BaseModel> result = new ArrayList<>();
+		int offset = (page - 1) * row;
+		if(specCond == null)
+			specCond = "LIMIT " + row + " OFFSET " + offset;
+		else
+			specCond += " LIMIT " + row + " OFFSET " + offset;
 		
-		if(condition instanceof GenericCondition) {
+		return this.findAll(baseCond, specCond);
+		
+	}
+	
+	// METHODS :
+	
+	protected String writeConditionWith(BaseModel model, Field attribute) {
+		
+		String result = UtilsDAO.getAttrName(attribute);
+		
+		result += " " + UtilsDAO.getCondOperand(attribute) + " ?";
+		
+		return result;
+		
+	}
+	
+	protected String getPreparedQuery(String query, BaseModel model, List<Field> attributes) throws Exception {
+		
+		PreparedStatement stm = this.connection.prepareStatement(query);
+		for(int i = 0, size = attributes.size(); i < size; i++) {
 			
-			GenericCondition cond = (GenericCondition)condition;
-			result = this.genericFindAll(cond);
-		
-		} else {
+			stm.setObject(i + 1, UtilsDAO.getValueOf(model, attributes.get(i)));
 			
-			throw new DaoException("You must use generic condition with this generic DAO !");
+		} int index = stm.toString().indexOf(": ");
+		
+		return stm.toString().substring(index + 2);
+		
+	}
+	
+	protected String arrangeBaseCond(BaseModel baseCond) throws Exception {
+		
+		String result = ""; List<Field> attributes = new ArrayList<>();
+		
+		if(baseCond != null && (attributes = UtilsDAO.getAttrNotNull(baseCond, UtilsDAO.getAttributes(baseCond))).size() > 0) {
+			
+			result = "WHERE (";
+			
+			for(int i = 0, size = attributes.size(); i < size; i++) {
+				
+				result += this.writeConditionWith(baseCond, attributes.get(i));
+				if(i != size-1)
+					result += " AND ";
+				
+			} result += ")";
+			
+		} return this.getPreparedQuery(result, baseCond, attributes);
+		
+	}
+	
+	protected String arrangeSpecCond(String specCond) {
+		
+		String result = "";
+		
+		if(specCond != null) {
+			
+			result = specCond;
 			
 		} return result;
 		
 	}
-
-	@Override
-	public List<BaseModel> findAll(int page, int row, TableCondition condition) throws Exception {
+	
+	protected String addCorrectlySpecCond(String result, String specCond) {
 		
-		int offset = (page - 1) * row;
-		condition.setQuery(condition.getQuery() + " LIMIT " + row + " OFFSET " + offset);
-		return this.findAll(condition);
+		String sc = this.arrangeSpecCond(specCond), sc2 = sc.toLowerCase();
+		int index = sc2.indexOf("where ");
+		if(index >= 0)
+			result += " AND " + sc.substring(index + 6);
+		else
+			result += " " + sc;
+		
+		return result;
+		
+	}
+	
+	protected String buildCondition(BaseModel baseCond, String specCond) throws Exception {
+		
+		String result = this.arrangeBaseCond(baseCond);
+		
+		if(result.length() == 0)
+			result = this.arrangeSpecCond(specCond);
+		else
+			result = this.addCorrectlySpecCond(result, specCond);
+		if(result.length() > 0)
+			result = " " + result;
+			
+		return result;
 		
 	}
 
