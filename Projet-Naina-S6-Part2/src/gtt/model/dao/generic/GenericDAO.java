@@ -42,7 +42,7 @@ public class GenericDAO implements InterfaceDAO {
 	
 	// INHERITED METHODS :
 	
-	protected int autoIncrement_save(BaseModel model) throws Exception{
+	protected int autoIncrementSave(BaseModel model) throws Exception{
 		
 		String tablename = UtilsDAO.getTableName(model.getClass());
 		List<Field> attributes = UtilsDAO.getAttributesWithoutId(model);
@@ -120,7 +120,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
-	protected int simple_save(BaseModel model) throws Exception{
+	protected int simpleSave(BaseModel model) throws Exception{
 		
 		String tablename = UtilsDAO.getTableName(model.getClass());
 		List<Field> attributes = UtilsDAO.getAttributes(model);
@@ -135,12 +135,10 @@ public class GenericDAO implements InterfaceDAO {
 		
 		int result = -1;
 		
-		this.connection.setAutoCommit(false);
 		if(this.isAutoIncrement())
-			result = this.autoIncrement_save(model);
+			result = this.autoIncrementSave(model);
 		else
-			result = this.simple_save(model);
-		this.connection.commit();
+			result = this.simpleSave(model);
 		
 		return result;
 		
@@ -181,7 +179,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
-	protected int generic_delete(GenericCondition condition) throws Exception {
+	protected int genericDelete(GenericCondition condition) throws Exception {
 		
 		String query = "DELETE FROM " + UtilsDAO.getTableName(condition.getModelClass());
 		if(condition.getId() == null)
@@ -202,7 +200,7 @@ public class GenericDAO implements InterfaceDAO {
 		if(condition instanceof GenericCondition) {
 			
 			GenericCondition cond = (GenericCondition)condition;
-			result = this.generic_delete(cond);
+			result = this.genericDelete(cond);
 		
 		} else {
 			
@@ -235,7 +233,7 @@ public class GenericDAO implements InterfaceDAO {
 			
 			Method tmp = UtilsDAO.getSetter(result, f.getName());
 			if(tmp != null) {
-				Object[] params = { reader.getObject(f.getName()) };
+				Object[] params = { reader.getObject(UtilsDAO.getAttrName(f)) };
 				tmp.invoke(result, params);
 			}
 			
@@ -258,7 +256,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
-	protected List<BaseModel> generic_findAll(GenericCondition condition) throws Exception{
+	protected List<BaseModel> genericFindAll(GenericCondition condition) throws Exception{
 		
 		String query = "SELECT * FROM " + UtilsDAO.getTableName(condition.getModelClass()) + condition.getQuery();
 		PreparedStatement stm = this.connection.prepareStatement(query);
@@ -275,7 +273,7 @@ public class GenericDAO implements InterfaceDAO {
 		if(condition instanceof GenericCondition) {
 			
 			GenericCondition cond = (GenericCondition)condition;
-			result = this.generic_findAll(cond);
+			result = this.genericFindAll(cond);
 		
 		} else {
 			

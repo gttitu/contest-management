@@ -1,6 +1,7 @@
 package gtt.test;
 
 import gtt.annotation.DbTable;
+import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
 
@@ -9,7 +10,10 @@ public class Voiture extends BaseModel {
 	
 	// ATTRIBUTES :
 	
+	@TableAttr(name="marque")
 	private Integer marque;
+	
+	@TableAttr(name="modele")
 	private String modele;
 	
 	// CONSTRUCTS :

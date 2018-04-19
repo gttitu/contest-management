@@ -8,6 +8,7 @@ import java.util.List;
 
 import gtt.annotation.DbTable;
 import gtt.annotation.NotTableAttr;
+import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
 
 public class UtilsDAO {
@@ -112,9 +113,23 @@ public class UtilsDAO {
 		
 	}
 	
+	public static String getAttrName(Field attribute) {
+		
+		String result = attribute.getName();
+		
+		Class<?> attrClass = attribute.getType();
+		if(attrClass.isAnnotationPresent(TableAttr.class)) {
+			
+			TableAttr attr = attrClass.getAnnotation(TableAttr.class);
+			result = attr.name();
+			
+		} return result;
+		
+	}
+	
 	public static String getTableName(Class<?> modelClass) {
 		
-		String result = null;
+		String result = modelClass.getSimpleName();
 		
 		if(modelClass.isAnnotationPresent(DbTable.class)) {
 			

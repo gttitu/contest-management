@@ -2,6 +2,7 @@ package gtt.test;
 
 import gtt.annotation.DbTable;
 import gtt.annotation.NotTableAttr;
+import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
 
@@ -10,6 +11,7 @@ public class Marque extends BaseModel {
 	
 	// ATTRIBUTES :
 	
+	@TableAttr(name="nom")
 	private String nom;
 	
 	@NotTableAttr

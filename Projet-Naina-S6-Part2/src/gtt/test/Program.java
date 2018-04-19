@@ -1,15 +1,11 @@
 package gtt.test;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import gtt.model.BaseModel;
-import gtt.model.GenericCondition;
 import gtt.model.dao.Connection;
 import gtt.model.dao.generic.GenericDAO;
-import gtt.model.dao.generic.UtilsDAO;
 
 public class Program {
 	
@@ -19,29 +15,16 @@ public class Program {
 		System.out.println("**********************************************");
 		
 		GenericDAO dao = new GenericDAO(connection, true);
-		String query = null;
+		//String query = null;
 		try {
-			
-			//List<BaseModel> models = dao.findAll(new GenericCondition(Marque.class, query));
-			//List<Marque> marques = convertToMarque(models);
-			//listMarques(marques);
-			
-			//Marque marque = (Marque)dao.findById(new GenericCondition(Marque.class, 2));
-			//System.out.println(marque.getId() + " : " + marque.getNom());
-			//dao.delete(new GenericCondition(Voiture.class, 3));
-			
-			//List<BaseModel> models = dao.findAll(new GenericCondition(Voiture.class, query));
-			//List<Voiture> voitures = convertToVoiture(models);
-			//listVoitures(voitures);
-			
-			//Marque m = new Marque("Mitsubishi");
-			//dao.save(m);
 			
 			Voiture v = new Voiture(1, 1, "Terios");
 			dao.update(v);
 			
 		} catch (Exception e) {
+			
 			e.printStackTrace();
+			
 		} finally {
 		
 			System.out.println("**********************************************");
