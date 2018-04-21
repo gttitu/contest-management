@@ -1,4 +1,4 @@
-CREATE DATABASE contest-management;
+CREATE DATABASE contestmanagement;
 
 --module setting (Tefy) :
 
@@ -6,6 +6,8 @@ CREATE TABLE Contest (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	description VARCHAR(100),
 	finished BOOLEAN,
+	dateBegin DATE,
+	dateEnd DATE,
 	PRIMARY KEY (id)
 )Engine=InnoDB;
 
@@ -15,6 +17,8 @@ CREATE TABLE Matter (
 	description VARCHAR(100),
 	coefficient TINYINT UNSIGNED,
 	average DECIMAL(10, 3),
+	datetimeBegin DATETIME,
+	datetimeEnd DATETIME,
 	PRIMARY KEY (id),
 	FOREIGN KEY(contest) REFERENCES Contest(id)
 )Engine=InnoDB;
