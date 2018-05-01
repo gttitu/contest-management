@@ -144,5 +144,15 @@ public class ContestDAO implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
+	public List<BaseModel> findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+		List<BaseModel> result = new ArrayList<>();
+		if(keywords == null)
+			keywords = " WHERE MATCH (description, dateBegin, dateEnd) AGAINST ('" + keywords +"' IN BOOLEAN MODE)";
+		else
+			keywords += " WHERE MATCH (description, dateBegin, dateEnd) AGAINST ('" + keywords +"' IN BOOLEAN MODE)";
+		
+		return result;
+	}
+	
 	
 }
