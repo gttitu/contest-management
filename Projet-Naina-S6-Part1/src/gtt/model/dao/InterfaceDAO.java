@@ -16,8 +16,8 @@ public interface InterfaceDAO {
 	
 	void findById(BaseModel model) throws Exception;
 	
-	List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception;
+	List findAll(BaseModel baseCond, String specCond) throws Exception;
 	
-	List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception;
+	List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception;
 
 }
