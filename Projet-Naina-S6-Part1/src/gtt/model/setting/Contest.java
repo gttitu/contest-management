@@ -8,24 +8,49 @@ public class Contest extends BaseModel{
 	
 	private String description;
 	private boolean finished;
+	private String dateBegin;
+	private String dateEnd;
 	
 	// CONSTRUCTORS :
 	
-	public Contest(String description) throws ModelException{
+	public Contest(){}
+
+	public Contest(String description, String dateBegin, String dateFinished) throws ModelException{
 		this.setDescription(description);
 		this.setFinished(false);
+		this.setDateBegin(dateBegin);
+		this.setDateEnd(dateFinished);
 	}
 
-	public Contest(Integer id, String description, boolean finished) throws ModelException{
+	public Contest(Integer id, String description, boolean finished, String dateBegin, String dateFinished) throws ModelException{
 		this.setId(id);
 		this.setDescription(description);
 		this.setFinished(finished);
+		this.setFinished(false);
+		this.setDateBegin(dateBegin);
+		this.setDateEnd(dateFinished);
 	}
 
-	// METHODS :
+	// GETTERS AND SETTERS :
 	
 	public String getDescription() {
 		return description;
+	}
+
+	public String getDateBegin() {
+		return dateBegin;
+	}
+
+	public void setDateBegin(String dateBegin) {
+		this.dateBegin = dateBegin;
+	}
+
+	public String getDateEnd() {
+		return dateEnd;
+	}
+
+	public void setDateEnd(String dateEnd) {
+		this.dateEnd = dateEnd;
 	}
 
 	public void setDescription(String description) {
