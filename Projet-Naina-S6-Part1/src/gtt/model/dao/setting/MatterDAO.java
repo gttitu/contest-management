@@ -35,63 +35,82 @@ public class MatterDAO  implements InterfaceDAO{
 	public int save(BaseModel model)throws Exception {
 		
 		int result = -1;
+		PreparedStatement preparedStmt = null;
+		try {
+			
+			if(this.isCorrect(model)) {
+			
+				Matter modelContest = (Matter) model;
+				String query = "Insert into Matter (contest, description, coefficient, average, datetimeBegin, datetimeEnd) values (?, ?, ?, ?, ?, ?)";
+				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt.setInt (1, modelContest.getContest());
+			    preparedStmt.setString (2, modelContest.getDescription());
+			    preparedStmt.setInt(3, modelContest.getCoefficient());
+			    preparedStmt.setFloat(4, modelContest.getAverage());
+			    preparedStmt.setString (5, modelContest.getDatetimeBegin());
+			    preparedStmt.setString(6, modelContest.getDatetimeEnd());
+			    result = preparedStmt.executeUpdate();
+		    }
+			else			
+				throw new DAOException("Incorrect type of model in parameter !");
+			return result;
+		} finally {
+			if(preparedStmt!=null)
+				preparedStmt.close();
+		}
 		
-		if(this.isCorrect(model)) {
-		
-			Matter modelContest = (Matter) model;
-			String query = "Insert into Matter (contest, description, coefficient, average, datetimeBegin, datetimeEnd) values (?, ?, ?, ?, ?, ?)";
-			PreparedStatement preparedStmt = this.connection.prepareStatement(query);
-			preparedStmt.setInt (1, modelContest.getContest());
-		    preparedStmt.setString (2, modelContest.getDescription());
-		    preparedStmt.setInt(3, modelContest.getCoefficient());
-		    preparedStmt.setFloat(4, modelContest.getAverage());
-		    preparedStmt.setString (5, modelContest.getDatetimeBegin());
-		    preparedStmt.setString(6, modelContest.getDatetimeEnd());
-		    result = preparedStmt.executeUpdate();
-	    }
-		else			
-			throw new DAOException("Incorrect type of model in parameter !");
-		
-		return result;
 	}
 
 	@Override
 	public int update(BaseModel model)throws Exception {
 		int result = -1;
-		
-		if(this.isCorrect(model)) {
-		
-			Matter modelContest = (Matter) model;
-			String query = "Update Matter set contest = ?, description = ?, coefficient = ?, average = ?, datetimeBegin = ?, datetimeEnd = ? where id = ? ";
-			PreparedStatement preparedStmt = this.connection.prepareStatement(query);
-			preparedStmt.setInt (1, modelContest.getContest());
-		    preparedStmt.setString (2, modelContest.getDescription());
-		    preparedStmt.setInt(3, modelContest.getCoefficient());
-		    preparedStmt.setFloat(4, modelContest.getAverage());
-		    preparedStmt.setString (5, modelContest.getDatetimeBegin());
-		    preparedStmt.setString(6, modelContest.getDatetimeEnd());
-		    preparedStmt.setInt(7, modelContest.getId());
-		    result = preparedStmt.executeUpdate();
+		PreparedStatement preparedStmt = null;
+		try {
+			
+			if(this.isCorrect(model)) {
+			
+				Matter modelContest = (Matter) model;
+				String query = "Update Matter set contest = ?, description = ?, coefficient = ?, average = ?, datetimeBegin = ?, datetimeEnd = ? where id = ? ";
+				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt.setInt (1, modelContest.getContest());
+			    preparedStmt.setString (2, modelContest.getDescription());
+			    preparedStmt.setInt(3, modelContest.getCoefficient());
+			    preparedStmt.setFloat(4, modelContest.getAverage());
+			    preparedStmt.setString (5, modelContest.getDatetimeBegin());
+			    preparedStmt.setString(6, modelContest.getDatetimeEnd());
+			    preparedStmt.setInt(7, modelContest.getId());
+			    result = preparedStmt.executeUpdate();
+			}
+			else			
+				throw new DAOException("Incorrect type of model in parameter !");   
+			return result;
+		} finally {
+			if(preparedStmt!=null)
+				preparedStmt.close();
 		}
-		else			
-			throw new DAOException("Incorrect type of model in parameter !");   
-		    
-	    return result;
+		
 	}
 
 	@Override
 	public int delete(BaseModel model)throws Exception {
 		int result = -1;
+		PreparedStatement preparedStmt = null;	
+		try {
 			
-		if(this.isCorrect(model)) {
-			String query = "Delete from Matter where id = ?";
-			PreparedStatement preparedStmt = this.connection.prepareStatement(query);
-			preparedStmt.setInt(1, model.getId());
-			result = preparedStmt.executeUpdate();
+			if(this.isCorrect(model)) {
+				String query = "Delete from Matter where id = ?";
+				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt.setInt(1, model.getId());
+				result = preparedStmt.executeUpdate();
+			}
+			else			
+				throw new DAOException("Incorrect type of model in parameter !");  	
+			
+			return result;
+		} finally {
+			if(preparedStmt!=null)
+				preparedStmt.close();
 		}
-		else			
-			throw new DAOException("Incorrect type of model in parameter !");  	
-	    return result;
 	}
 
 			
@@ -124,21 +143,31 @@ public class MatterDAO  implements InterfaceDAO{
 	@Override
 	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception {
 		List<BaseModel> result = new ArrayList<>();
-		
-		if(this.isCorrect(baseCond)) {
-		
-			String query = "SELECT * FROM Matter";
-			if(specCond != null)
-				query += " " + specCond;
-			PreparedStatement stm = this.connection.prepareStatement(query);
-			ResultSet set = stm.executeQuery();
-			result = this.mapAll(set);
-		
-		} else {
+		PreparedStatement stm = null;
+		ResultSet set = null;
+		try {
 			
-			throw new DAOException("Incorrect type of model in parameter !");
+			if(this.isCorrect(baseCond)) {
 			
-		} return result;
+				String query = "SELECT * FROM Matter";
+				if(specCond != null)
+					query += " " + specCond;
+				stm = this.connection.prepareStatement(query);
+				set = stm.executeQuery();
+				result = this.mapAll(set);
+			
+			} else {
+				
+				throw new DAOException("Incorrect type of model in parameter !");
+				
+			} 
+			return result;
+		} finally {
+			if(set!=null)
+				set.close();
+			if(stm!=null)
+				stm.close();
+		}
 	}
 
 	@Override
@@ -150,6 +179,45 @@ public class MatterDAO  implements InterfaceDAO{
 			specCond += " LIMIT " + row + " OFFSET " + offset;
 		
 		return this.findAll(baseCond, specCond);
+	}
+	
+	public List<BaseModel> findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+		
+		List<BaseModel> result = new ArrayList<>();
+		PreparedStatement stm = null;
+		ResultSet set = null;
+		try {
+			
+			if(baseCond == null) {
+			
+				String query = "SELECT * FROM Matter";
+				stm = null;
+				if(keywords != null){
+					keywords = "*"+ keywords + "*";
+					query += " WHERE MATCH (description) AGAINST (? IN BOOLEAN MODE)";
+					stm = this.connection.prepareStatement(query);
+					stm.setObject(1, keywords);
+					
+				} else{
+				
+					stm = this.connection.prepareStatement(query);
+				
+				} set = stm.executeQuery();
+				result = this.mapAll(set);
+			
+			} else {
+				
+				throw new DAOException("BaseCond doesn't work here . Use specCond for this approach !");
+				
+			} 
+			return result;
+		} finally {
+			if(set!=null)
+				set.close();
+			if(stm!=null)
+				stm.close();
+		}
+		
 	}
 	
 	

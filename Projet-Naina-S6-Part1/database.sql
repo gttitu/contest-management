@@ -45,16 +45,15 @@ CREATE TABLE CenterDetail (
 )Engine=InnoDB;
 
 
+
 --FullText
 ALTER TABLE Contest
-ADD FULLTEXT contestIndex (description, dateBegin, dateEnd);
+ADD FULLTEXT contestIndex (description);
 
 ALTER TABLE Matter
-ADD FULLTEXT matterIndex (description, coefficient, average, datetimeBegin, datetimeEnd);
+ADD FULLTEXT matterIndex (description);
 
 ALTER TABLE Center
-ADD FULLTEXT centerIndex (description, location, nbAllowable);
+ADD FULLTEXT centerIndex (description, location);
 
-ALTER TABLE CenterDetail
-ADD FULLTEXT centerDetailIndex (nbMen, nbWomen, minAge, maxAge);
 
