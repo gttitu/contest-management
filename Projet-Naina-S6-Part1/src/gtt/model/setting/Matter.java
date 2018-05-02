@@ -7,38 +7,59 @@ public class Matter extends BaseModel{
 	
 	// ATTRIBUTES :
 	
-	private Integer idContest;
+	private Integer contest;
 	private String description;
 	private Integer coefficient;
 	private Float average;
+	private String datetimeBegin;
+	private String datetimeEnd;
 	
 	// CONSTRUCTORS :
 	
-	public Matter(Integer idContest, String description, Integer coefficient, Float average) throws ModelException{
-		this.setIdContest(idContest);
+	public Matter(Integer contest, String description, Integer coefficient, Float average, String datetimeBegin, String datetimeEnd) throws ModelException{
+		this.setContest(contest);
 		this.setDescription(description);
 		this.setCoefficient(coefficient);
 		this.setAverage(average);
+		this.setDatetimeBegin(datetimeBegin);
+		this.setDatetimeEnd(datetimeEnd);
 	}
 	
-	public Matter(Integer id, Integer idContest, String description, Integer coefficient, Float average) throws ModelException{
+	public Matter(Integer id, Integer contest, String description, Integer coefficient, Float average,  String datetimeBegin, String datetimeEnd) throws ModelException{
 		this.setId(id);
-		this.setIdContest(idContest);
+		this.setContest(contest);
 		this.setDescription(description);
 		this.setCoefficient(coefficient);
 		this.setAverage(average);
+		this.setDatetimeBegin(datetimeBegin);
+		this.setDatetimeEnd(datetimeEnd);
 	}
 	
 	// METHODS :
 		
-	public Integer getIdContest() {
-		return idContest;
+	public String getDatetimeBegin() {
+		return datetimeBegin;
 	}
-	public void setIdContest(Integer idContest) throws ModelException {
-		if(idContest > 0)
-			this.idContest = idContest;
+
+	public void setDatetimeBegin(String datetimeBegin) {
+		this.datetimeBegin = datetimeBegin;
+	}
+
+	public String getDatetimeEnd() {
+		return datetimeEnd;
+	}
+
+	public void setDatetimeEnd(String datetimeEnd) {
+		this.datetimeEnd = datetimeEnd;
+	}
+	public Integer getContest() {
+		return contest;
+	}
+	public void setContest(Integer contest) throws ModelException {
+		if(contest > 0)
+			this.contest = contest;
 		else
-			throw new ModelException("Invalid value on IDContest : " + idContest + " !");
+			throw new ModelException("Invalid value on IDContest : " + contest + " !");
 	}
 	public String getDescription() {
 		return description;
