@@ -10,6 +10,7 @@ import java.util.List;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
 import gtt.model.candidate.CandidateDetail;
+import gtt.model.dao.DAOException;
 import gtt.model.dao.InterfaceDAO;
 
 public class CandidateDetailDAO implements InterfaceDAO {
@@ -30,40 +31,54 @@ public class CandidateDetailDAO implements InterfaceDAO {
 
 	@Override
 	public int save(BaseModel model) throws SQLException {
-
-		CandidateDetail cd = (CandidateDetail)model;
-		String query = "INSERT INTO CandidateDetail(candidate, firstname, lastname, age, gender) VALUES(?, ?, ?, ?, ?)";
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		stm.setObject(1, cd.getCandidate()); stm.setObject(2, cd.getFirstname());
-		stm.setObject(3, cd.getLastname()); stm.setObject(4, cd.getAge());
-		stm.setObject(5, cd.getGender());
-		
-		return stm.executeUpdate();
+		PreparedStatement stm = null;
+		try {
+			CandidateDetail cd = (CandidateDetail)model;
+			String query = "INSERT INTO CandidateDetail(candidate, firstname, lastname, age, gender) VALUES(?, ?, ?, ?, ?)";
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, cd.getCandidate()); stm.setObject(2, cd.getFirstname());
+			stm.setObject(3, cd.getLastname()); stm.setObject(4, cd.getAge());
+			stm.setObject(5, cd.getGender());
+			return stm.executeUpdate();
+		}finally {
+			if(stm!=null)
+				stm.close();
+		}
 		
 	}
 
 	@Override
 	public int update(BaseModel model) throws SQLException {
+		PreparedStatement stm = null;
+		try {
+			CandidateDetail cd = (CandidateDetail)model;
+			String query = "UPDATE CandidateDetail SET candidate = ?, firstname = ?, lastname = ?, age = ?, gender = ? WHERE id = ?";
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, cd.getCandidate()); stm.setObject(2, cd.getFirstname());
+			stm.setObject(3, cd.getLastname()); stm.setObject(4, cd.getAge());
+			stm.setObject(5, cd.getGender()); stm.setObject(6, cd.getId());
+			return stm.executeUpdate();
+		}finally {
+			if(stm!=null)
+				stm.close();
+		}
 		
-		CandidateDetail cd = (CandidateDetail)model;
-		String query = "UPDATE CandidateDetail SET candidate = ?, firstname = ?, lastname = ?, age = ?, gender = ? WHERE id = ?";
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		stm.setObject(1, cd.getCandidate()); stm.setObject(2, cd.getFirstname());
-		stm.setObject(3, cd.getLastname()); stm.setObject(4, cd.getAge());
-		stm.setObject(5, cd.getGender()); stm.setObject(6, cd.getId());
-		
-		return stm.executeUpdate();
 		
 	}
 
 	@Override
 	public int delete(BaseModel model) throws SQLException {
+		PreparedStatement stm = null;
+		try {
+			String query = "DELETE FROM CandidateDetail WHERE id = ?";
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, model.getId());
+			return stm.executeUpdate();
+		}finally {
+			if(stm!=null)
+				stm.close();
+		}
 		
-		String query = "DELETE FROM CandidateDetail WHERE id = ?";
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		stm.setObject(1, model.getId());
-		
-		return stm.executeUpdate();
 		
 	}
 
@@ -95,20 +110,27 @@ public class CandidateDetailDAO implements InterfaceDAO {
 	}
 
 	@Override
-	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws SQLException, ModelException {
-		
-		String query = "SELECT * FROM CandidateDetail";
-		if(specCond != null)
-			query += " " + specCond;
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		ResultSet set = stm.executeQuery();
-		
-		return this.mapAll(set);
+	public List findAll(BaseModel baseCond, String specCond) throws SQLException, ModelException {
+		PreparedStatement stm = null;
+		ResultSet set = null;
+		try {
+			String query = "SELECT * FROM CandidateDetail";
+			if(specCond != null)
+				query += " " + specCond;
+			stm = this.connection.prepareStatement(query);
+			set = stm.executeQuery();
+			return this.mapAll(set);
+		}finally {
+			if(set!=null)
+				set.close();
+			if(stm!=null)
+				stm.close();
+		}
 		
 	}
 
 	@Override
-	public List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws SQLException, ModelException {
+	public List findAll(int page, int row, BaseModel baseCond, String specCond) throws SQLException, ModelException {
 		
 		int offset = (page - 1) * row;
 		if(specCond == null)
@@ -119,5 +141,45 @@ public class CandidateDetailDAO implements InterfaceDAO {
 		return this.findAll(baseCond, specCond);
 		
 	}
-
+	
+	@Override
+	public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+		
+		List<BaseModel> result = new ArrayList<>();
+		PreparedStatement stm = null;
+		ResultSet set = null;
+		try {
+			
+			if(baseCond == null) {
+			
+				String query = "SELECT * FROM CandidateDetail";
+				stm = null;
+				if(keywords != null){
+					keywords = "*"+ keywords + "*";
+					query += " WHERE MATCH (firstname, lastname) AGAINST (? IN BOOLEAN MODE)";
+					stm = this.connection.prepareStatement(query);
+					stm.setObject(1, keywords);
+					
+				} else{
+				
+					stm = this.connection.prepareStatement(query);
+				
+				} set = stm.executeQuery();
+				result = this.mapAll(set);
+			
+			} else {
+				
+				throw new DAOException("BaseCond doesn't work here . Use specCond for this approach !");
+				
+			} 
+			return result;
+		} finally {
+			if(set!=null)
+				set.close();
+			if(stm!=null)
+				stm.close();
+		}
+		
+	}
+	
 }

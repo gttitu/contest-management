@@ -30,37 +30,52 @@ public class CandidateDAO implements InterfaceDAO {
 
 	@Override
 	public int save(BaseModel model) throws SQLException {
-
-		Candidate c = (Candidate)model;
-		String query = "INSERT INTO Candidate(center) VALUES(?)";
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		stm.setObject(1, c.getCenter());
+		PreparedStatement stm = null;
 		
-		return stm.executeUpdate();
+		try {
+			Candidate c = (Candidate)model;
+			String query = "INSERT INTO Candidate(center) VALUES(?)";
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, c.getCenter());
+			return stm.executeUpdate();
+		}finally {
+			if(stm!=null)
+				stm.close();
+		}
+		
+		
 		
 	}
 
 	@Override
 	public int update(BaseModel model) throws SQLException {
-		
-		Candidate c = (Candidate)model;
-		String query = "UPDATE Candidate SET center = ? WHERE id = ?";
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		stm.setObject(1, c.getCenter());
-		stm.setObject(2, c.getId());
-		
-		return stm.executeUpdate();
+		PreparedStatement stm = null;
+		try {
+			Candidate c = (Candidate)model;
+			String query = "UPDATE Candidate SET center = ? WHERE id = ?";
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, c.getCenter());
+			stm.setObject(2, c.getId());
+			return stm.executeUpdate();
+		}finally {
+			if(stm!=null)
+				stm.close();
+		}
 		
 	}
 
 	@Override
 	public int delete(BaseModel model) throws SQLException {
-		
-		String query = "DELETE FROM Candidate WHERE id = ?";
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		stm.setObject(1, model.getId());
-		
-		return stm.executeUpdate();
+		PreparedStatement stm = null;
+		try {
+			String query = "DELETE FROM Candidate WHERE id = ?";
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, model.getId());
+			return stm.executeUpdate();
+		}finally {
+			if(stm!=null)
+				stm.close();
+		}		
 		
 	}
 
@@ -88,20 +103,28 @@ public class CandidateDAO implements InterfaceDAO {
 	}
 
 	@Override
-	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws SQLException, ModelException {
+	public List findAll(BaseModel baseCond, String specCond) throws SQLException, ModelException {
+		PreparedStatement stm = null;
+		ResultSet set = null;
+		try {
+			String query = "SELECT * FROM Candidate";
+			if(specCond != null)
+				query += " " + specCond;
+			stm = this.connection.prepareStatement(query);
+			set = stm.executeQuery();
+			return this.mapAll(set);
+		}finally {
+			if(set!=null)
+				set.close();
+			if(stm!=null)
+				stm.close();
+		}
 		
-		String query = "SELECT * FROM Candidate";
-		if(specCond != null)
-			query += " " + specCond;
-		PreparedStatement stm = this.connection.prepareStatement(query);
-		ResultSet set = stm.executeQuery();
-		
-		return this.mapAll(set);
 		
 	}
 
 	@Override
-	public List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws SQLException, ModelException {
+	public List findAll(int page, int row, BaseModel baseCond, String specCond) throws SQLException, ModelException {
 		
 		int offset = (page - 1) * row;
 		if(specCond == null)

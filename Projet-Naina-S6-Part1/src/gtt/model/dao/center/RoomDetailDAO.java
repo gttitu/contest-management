@@ -40,23 +40,28 @@ public class RoomDetailDAO implements InterfaceDAO {
 
 	@Override
 	public int save(BaseModel model) throws Exception {
-
+		PreparedStatement stm = null;
 		int result = -1;
-		
-		if(this.isCorrect(model)) {
-		
-			RoomDetail c = (RoomDetail)model;
-			String query = "INSERT INTO RoomDetail(room, candidate) VALUES(?, ?)";
-			PreparedStatement stm = this.connection.prepareStatement(query);
-			stm.setObject(1, c.getRoom());
-			stm.setObject(2, c.getCandidate());
-			result = stm.executeUpdate();
-		
-		} else {
+		try {
+			if(this.isCorrect(model)) {
 			
-			throw new DAOException("Incorrect type of model in parameter !");
+				RoomDetail c = (RoomDetail)model;
+				String query = "INSERT INTO RoomDetail(room, candidate) VALUES(?, ?)";
+				stm = this.connection.prepareStatement(query);
+				stm.setObject(1, c.getRoom());
+				stm.setObject(2, c.getCandidate());
+				result = stm.executeUpdate();
 			
-		} return result;
+			} else {
+				
+				throw new DAOException("Incorrect type of model in parameter !");
+				
+			}return result;
+		}finally{
+			if(stm!=null)
+			stm.close(); 
+		}
+	
 		
 	}
 
@@ -64,22 +69,27 @@ public class RoomDetailDAO implements InterfaceDAO {
 	public int update(BaseModel model) throws Exception {
 		
 		int result = -1;
+		PreparedStatement stm = null;
+		try {
+			if(this.isCorrect(model)) {
+			
+				RoomDetail c = (RoomDetail)model;
+				String query = "UPDATE Room SET room = ?, candidate = ? WHERE id = ?";
+				stm = this.connection.prepareStatement(query);
+				stm.setObject(1, c.getRoom());
+				stm.setObject(2, c.getCandidate());
+				stm.setObject(3, c.getId());
+				result = stm.executeUpdate();
 				
-		if(this.isCorrect(model)) {
-		
-			RoomDetail c = (RoomDetail)model;
-			String query = "UPDATE Room SET room = ?, candidate = ? WHERE id = ?";
-			PreparedStatement stm = this.connection.prepareStatement(query);
-			stm.setObject(1, c.getRoom());
-			stm.setObject(2, c.getCandidate());
-			stm.setObject(3, c.getId());
-			result = stm.executeUpdate();
-			
-		} else {
-			
-			throw new DAOException("Incorrect type of model in parameter !");
-			
-		} return result;
+			} else {
+				
+				throw new DAOException("Incorrect type of model in parameter !");
+				
+			}return result;
+		}finally{
+			if(stm!=null)
+			stm.close(); 
+		}
 		
 	}
 
@@ -87,19 +97,25 @@ public class RoomDetailDAO implements InterfaceDAO {
 	public int delete(BaseModel model) throws Exception {
 		
 		int result = -1;
+		PreparedStatement stm = null;
+		try {
+			if(this.isCorrect(model)) {
+			
+				String query = "DELETE FROM RoomDetail WHERE id = ?";
+				stm = this.connection.prepareStatement(query);
+				stm.setObject(1, model.getId());
+				result = stm.executeUpdate();
+				
+			} else {
+				
+				throw new DAOException("Incorrect type of model in parameter !");
+				
+			}return result;
+		}finally{
+			if(stm!=null)
+			stm.close();
+		}
 		
-		if(this.isCorrect(model)) {
-		
-			String query = "DELETE FROM RoomDetail WHERE id = ?";
-			PreparedStatement stm = this.connection.prepareStatement(query);
-			stm.setObject(1, model.getId());
-			result = stm.executeUpdate();
-			
-		} else {
-			
-			throw new DAOException("Incorrect type of model in parameter !");
-			
-		} return result;
 		
 	}
 
@@ -128,29 +144,40 @@ public class RoomDetailDAO implements InterfaceDAO {
 	}
 
 	@Override
-	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception {
+	public List findAll(BaseModel baseCond, String specCond) throws Exception {
 		
-		List<BaseModel> result = new ArrayList<>();
-		
-		if(this.isCorrect(baseCond)) {
+		List result = new ArrayList<>();
+		PreparedStatement stm = null;
+		ResultSet set = null;
+		try{
+			if(this.isCorrect(baseCond)) {
 		
 			String query = "SELECT * FROM RoomDetail";
 			if(specCond != null)
 				query += " " + specCond;
-			PreparedStatement stm = this.connection.prepareStatement(query);
-			ResultSet set = stm.executeQuery();
+			stm = this.connection.prepareStatement(query);
+			set = stm.executeQuery();
 			result = this.mapAll(set);
 		
-		} else {
+			} else {
 			
-			throw new DAOException("Incorrect type of model in parameter !");
+				throw new DAOException("Incorrect type of model in parameter !");
 			
-		} return result;
+			}
+			return result;
+		}
+		finally{
+			if(set!=null)
+			set.close();
+			if(stm!=null)
+			stm.close();
+		}
+		
 		
 	}
 
 	@Override
-	public List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
+	public List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
 		
 		int offset = (page - 1) * row;
 		if(specCond == null)

@@ -76,16 +76,36 @@ CREATE TABLE RoomDetail(
 	FOREIGN KEY (idCandidate) REFERENCES Candidate(id)
 )Engine=InnoDB;
 
+/* TOAVINA MODULE TABLES */
+
+CREATE TABLE Mark (
+	id INT NOT NULL AUTO_INCREMENT,
+	candidate INT UNSIGNED,
+	matter INT UNSIGNED,
+	markValue DECIMAL(5, 2),
+	PRIMARY KEY(id),
+	FOREIGN KEY(candidate) REFERENCES Candidate(id),
+	FOREIGN KEY(matter) REFERENCES Matter(id)
+)Engine=InnoDB;
+
+CREATE TABLE Deliberation (
+	id INT NOT NULL AUTO_INCREMENT,
+	center INT UNSIGNED,
+	matter INT UNSIGNED,
+	markValue DECIMAL(5, 2),
+	PRIMARY KEY(id),
+	FOREIGN KEY(center) REFERENCES Center(id),
+	FOREIGN KEY(matter) REFERENCES Matter(id)
+)Engine=InnoDB;
 -- FullText
+ALTER TABLE CandidateDetail
+ADD FULLTEXT candidateDetailIndex (firstname, lastname);
+
 ALTER TABLE Contest
-ADD FULLTEXT contestIndex (description, dateBegin, dateEnd);
+ADD FULLTEXT contestIndex (description);
 
 ALTER TABLE Matter
-ADD FULLTEXT matterIndex (description, coefficient, average, datetimeBegin, datetimeEnd);
+ADD FULLTEXT matterIndex (description);
 
 ALTER TABLE Center
-ADD FULLTEXT centerIndex (description, location, nbAllowable);
-
-ALTER TABLE CenterDetail
-ADD FULLTEXT centerDetailIndex (nbMen, nbWomen, minAge, maxAge);
-
+ADD FULLTEXT centerIndex (description, location);

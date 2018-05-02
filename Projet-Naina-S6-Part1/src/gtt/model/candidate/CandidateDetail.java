@@ -6,7 +6,7 @@ import gtt.model.ModelException;
 public class CandidateDetail extends BaseModel {
 	
 	// ATTRIBUTES :
-	
+
 	private Integer candidate;
 	private String firstname;
 	private String lastname;
@@ -90,7 +90,11 @@ public class CandidateDetail extends BaseModel {
 	}
 	
 	// METHODS :
-	
+	@Override
+	public String toString() {
+		return "CandidateDetail [candidate=" + candidate + ", firstname=" + firstname + ", lastname=" + lastname
+				+ ", age=" + age + ", gender=" + gender + ", id=" + id + "]";
+	}
 	
 	
 	// STATIC METHODS :
