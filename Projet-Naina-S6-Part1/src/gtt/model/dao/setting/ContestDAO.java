@@ -133,9 +133,20 @@ public class ContestDAO implements InterfaceDAO{
 		
 	}
 	
-	@Override
-	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception {
+	private List<BaseModel> mapAllInCache(ResultSet set) throws SQLException, ModelException{
+		
 		List<BaseModel> result = new ArrayList<>();
+		
+		while(set.next()) {
+				result.add(new Contest(set.getInt("id"), set.getString("description"), set.getBoolean("finished"), set.getDate("dateBegin").toString(), set.getDate("dateEnd").toString()));
+		} 
+		return result;
+		
+	}
+	
+	@Override
+	public List findAll(BaseModel baseCond, String specCond) throws Exception {
+		List result = new ArrayList<>();
 		PreparedStatement stm = null;
 		ResultSet set = null;
 		try {
@@ -167,7 +178,7 @@ public class ContestDAO implements InterfaceDAO{
 	}
 
 	@Override
-	public List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
+	public List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
 		int offset = (page - 1) * row;
 		if(specCond == null)
 			specCond = " LIMIT " + row + " OFFSET " + offset;
@@ -177,9 +188,10 @@ public class ContestDAO implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
-	public List<BaseModel> findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+	@Override
+	public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
 		
-		List<BaseModel> result = new ArrayList<>();
+		List result = new ArrayList<>();
 		PreparedStatement stm = null;
 		ResultSet set = null;
 		try {
