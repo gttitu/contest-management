@@ -117,7 +117,7 @@ public class ContestDAO implements InterfaceDAO{
 	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception {
 		List<BaseModel> result = new ArrayList<>();
 		
-		if(this.isCorrect(baseCond)) {
+		if(baseCond == null && specCond != null) {
 		
 			String query = "SELECT * FROM Contest";
 			if(specCond != null)
@@ -128,9 +128,10 @@ public class ContestDAO implements InterfaceDAO{
 		
 		} else {
 			
-			throw new DAOException("Incorrect type of model in parameter !");
+			throw new DAOException("BaseCond doesn't work here . Use specCond for this approach !");
 			
 		} return result;
+		
 	}
 
 	@Override
@@ -148,10 +149,38 @@ public class ContestDAO implements InterfaceDAO{
 		List<BaseModel> result = new ArrayList<>();
 		String specCond = null;
 		if(keywords != null)
-			specCond = " WHERE MATCH (description, dateBegin, dateEnd) AGAINST ('" + keywords +"' IN BOOLEAN MODE)";
+			specCond = " WHERE MATCH (description, dateBegin, dateEnd) AGAINST ('" + keywords + "' IN BOOLEAN MODE)";
 				
 		return this.findAll(baseCond, specCond);
 	}
 	
+	public List<BaseModel> findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+	
+		List<BaseModel> result = new ArrayList<>();
+		
+		if(baseCond == null) {
+		
+			String query = "SELECT * FROM Contest";
+			PreparedStatement stm = null;
+			if(keywords != null){
+			
+				query += " WHERE MATCH (description, dateBegin, dateEnd) AGAINST (? IN BOOLEAN MODE)";
+				stm = this.connection.prepareStatement(query);
+				stm.setObject(1, keywords);
+				
+			} else{
+			
+				stm = this.connection.prepareStatement(query);
+			
+			} ResultSet set = stm.executeQuery();
+			result = this.mapAll(set);
+		
+		} else {
+			
+			throw new DAOException("BaseCond doesn't work here . Use specCond for this approach !");
+			
+		} return result;
+		
+	}
 	
 }
