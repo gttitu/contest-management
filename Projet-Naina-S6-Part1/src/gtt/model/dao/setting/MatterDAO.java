@@ -141,8 +141,8 @@ public class MatterDAO  implements InterfaceDAO{
 	}
 	
 	@Override
-	public List<BaseModel> findAll(BaseModel baseCond, String specCond) throws Exception {
-		List<BaseModel> result = new ArrayList<>();
+	public List findAll(BaseModel baseCond, String specCond) throws Exception {
+		List result = new ArrayList<>();
 		PreparedStatement stm = null;
 		ResultSet set = null;
 		try {
@@ -171,7 +171,7 @@ public class MatterDAO  implements InterfaceDAO{
 	}
 
 	@Override
-	public List<BaseModel> findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
+	public List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
 		int offset = (page - 1) * row;
 		if(specCond == null)
 			specCond = " LIMIT " + row + " OFFSET " + offset;
@@ -181,9 +181,10 @@ public class MatterDAO  implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
-	public List<BaseModel> findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+	@Override
+	public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
 		
-		List<BaseModel> result = new ArrayList<>();
+		List result = new ArrayList<>();
 		PreparedStatement stm = null;
 		ResultSet set = null;
 		try {
