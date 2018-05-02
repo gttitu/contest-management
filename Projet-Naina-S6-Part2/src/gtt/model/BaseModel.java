@@ -1,9 +1,12 @@
 package gtt.model;
 
+import gtt.annotation.TableAttr;
+
 public abstract class BaseModel {
 	
 	// ATTRIBUTES :
 	
+	@TableAttr(name = "id")
 	protected Integer id;
 	
 	// METHODS :
