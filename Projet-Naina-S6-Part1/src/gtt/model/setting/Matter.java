@@ -85,6 +85,12 @@ public class Matter extends BaseModel{
 		else
 			throw new ModelException("Invalid value on Average : " + average + " !");
 	}
+	@Override
+	public String toString() {
+		return "Matter [contest=" + contest + ", description=" + description + ", coefficient=" + coefficient
+				+ ", average=" + average + ", datetimeBegin=" + datetimeBegin + ", datetimeEnd=" + datetimeEnd + ", id="
+				+ id + "]";
+	}
 	
 	
 }
