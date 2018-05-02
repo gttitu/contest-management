@@ -38,6 +38,11 @@ public class Candidate extends BaseModel {
 		else
 			throw new ModelException("Invalid value on Center : " + center + " !");
 	}
+
+	@Override
+	public String toString() {
+		return "Candidate [center=" + center + ", id=" + id + "]";
+	}
 	
 	// METHODS :
 	
