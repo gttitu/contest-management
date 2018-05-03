@@ -1,4 +1,4 @@
-package gtt.model.dao.setting;
+package gtt.model.dao.center;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,11 +9,11 @@ import java.util.List;
 
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
+import gtt.model.center.CenterDetail;
 import gtt.model.dao.DAOException;
 import gtt.model.dao.InterfaceDAO;
-import gtt.model.setting.*;
 
-public class MatterDAO  implements InterfaceDAO{
+public class CenterDetailDAO implements InterfaceDAO{
 	
 	// ATTRIBUTES :
 	
@@ -21,14 +21,14 @@ public class MatterDAO  implements InterfaceDAO{
 		
 	// CONSTRUCTS :
 		
-	public MatterDAO(Connection connection) {
+	public CenterDetailDAO(Connection connection) {
 		this.connection = connection;
 	}
 	
 	// METHODS :
 	
 	public boolean isCorrect(BaseModel model) {
-		return (model instanceof Matter);
+		return (model instanceof CenterDetail);
 	}
 	
 	@Override
@@ -40,15 +40,14 @@ public class MatterDAO  implements InterfaceDAO{
 			
 			if(this.isCorrect(model)) {
 			
-				Matter modelContest = (Matter) model;
-				String query = "Insert into Matter (contest, description, coefficient, average, datetimeBegin, datetimeEnd) values (?, ?, ?, ?, ?, ?)";
+				CenterDetail modelCenter = (CenterDetail) model;
+				String query = "Insert into CenterDetail (center, nbMen, nbWomen, minAge, maxAge) values (?, ?, ?, ?, ?)";
 				preparedStmt = this.connection.prepareStatement(query);
-				preparedStmt.setInt (1, modelContest.getContest());
-			    preparedStmt.setString (2, modelContest.getDescription());
-			    preparedStmt.setInt(3, modelContest.getCoefficient());
-			    preparedStmt.setFloat(4, modelContest.getAverage());
-			    preparedStmt.setString (5, modelContest.getDatetimeBegin());
-			    preparedStmt.setString(6, modelContest.getDatetimeEnd());
+				preparedStmt.setInt (1, modelCenter.getCenter());
+			    preparedStmt.setInt (2, modelCenter.getNbMen());
+			    preparedStmt.setInt(3, modelCenter.getNbWomen());
+			    preparedStmt.setInt(4, modelCenter.getMinAge());
+			    preparedStmt.setInt(5, modelCenter.getMaxAge());
 			    result = preparedStmt.executeUpdate();
 		    }
 			else			
@@ -73,16 +72,15 @@ public class MatterDAO  implements InterfaceDAO{
 			
 			if(this.isCorrect(model)) {
 			
-				Matter modelContest = (Matter) model;
-				String query = "Update Matter set contest = ?, description = ?, coefficient = ?, average = ?, datetimeBegin = ?, datetimeEnd = ? where id = ? ";
+				CenterDetail modelCenter = (CenterDetail) model;
+				String query = "Update CenterDetail set center = ?, nbMen = ?, nbWomen = ?, minAge = ?, maxAge= ? where id = ? ";
 				preparedStmt = this.connection.prepareStatement(query);
-				preparedStmt.setInt (1, modelContest.getContest());
-			    preparedStmt.setString (2, modelContest.getDescription());
-			    preparedStmt.setInt(3, modelContest.getCoefficient());
-			    preparedStmt.setFloat(4, modelContest.getAverage());
-			    preparedStmt.setString (5, modelContest.getDatetimeBegin());
-			    preparedStmt.setString(6, modelContest.getDatetimeEnd());
-			    preparedStmt.setInt(7, modelContest.getId());
+				preparedStmt.setInt (1, modelCenter.getCenter());
+			    preparedStmt.setInt (2, modelCenter.getNbMen());
+			    preparedStmt.setInt(3, modelCenter.getNbWomen());
+			    preparedStmt.setInt(4, modelCenter.getMinAge());
+			    preparedStmt.setInt(5, modelCenter.getMaxAge());
+			    preparedStmt.setInt(6, modelCenter.getId());
 			    result = preparedStmt.executeUpdate();
 			}
 			else			
@@ -106,7 +104,7 @@ public class MatterDAO  implements InterfaceDAO{
 		try {
 			
 			if(this.isCorrect(model)) {
-				String query = "Delete from Matter where id = ?";
+				String query = "Delete from CenterDetail where id = ?";
 				preparedStmt = this.connection.prepareStatement(query);
 				preparedStmt.setInt(1, model.getId());
 				result = preparedStmt.executeUpdate();
@@ -131,13 +129,12 @@ public class MatterDAO  implements InterfaceDAO{
 		
 		List<BaseModel> tmp = this.findAll(model, "WHERE id = " + model.getId());
 		if(tmp.size() == 1) {
-			Matter c = (Matter)tmp.get(0);
-			((Matter)model).setContest(c.getContest());
-			((Matter)model).setDescription(c.getDescription());
-			((Matter)model).setCoefficient(c.getCoefficient());
-			((Matter)model).setAverage(c.getAverage());
-			((Matter)model).setDatetimeBegin(c.getDatetimeBegin());
-			((Matter)model).setDatetimeEnd(c.getDatetimeEnd());
+			CenterDetail c = (CenterDetail)tmp.get(0);
+			((CenterDetail)model).setCenter(c.getCenter());
+			((CenterDetail)model).setNbMen(c.getNbMen());
+			((CenterDetail)model).setNbWomen(c.getNbWomen());
+			((CenterDetail)model).setMinAge(c.getMinAge());
+			((CenterDetail)model).setMaxAge(c.getMaxAge());
 		}
 	}
 
@@ -146,7 +143,7 @@ public class MatterDAO  implements InterfaceDAO{
 		List<BaseModel> result = new ArrayList<>();
 		
 		while(set.next()) {
-				result.add(new Matter(set.getInt("id"), set.getInt("contest"), set.getString("description"), set.getInt("coefficient"), set.getFloat("average"), set.getDate("datetimeBegin").toString(), set.getDate("datetimeEnd").toString()));
+				result.add(new CenterDetail(set.getInt("id"), set.getInt("center"), set.getInt("nbMen"), set.getInt("nbWomen"), set.getInt("minAge"), set.getInt("maxAge")));
 		} 
 		return result;
 		
@@ -161,7 +158,7 @@ public class MatterDAO  implements InterfaceDAO{
 			
 			if(this.isCorrect(baseCond)) {
 			
-				String query = "SELECT * FROM Matter";
+				String query = "SELECT * FROM CenterDetail";
 				if(specCond != null)
 					query += " " + specCond;
 				stm = this.connection.prepareStatement(query);
@@ -198,53 +195,11 @@ public class MatterDAO  implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
-	private List<BaseModel> executeFullText(PreparedStatement stm, String query, String keywords) throws Exception{
-		
-		List<BaseModel> result = new ArrayList<>();
-		ResultSet set = null;
-		
-		try {
-			
-			stm = this.connection.prepareStatement(query);
-			stm.setObject(1, keywords);
-			set = stm.executeQuery();
-			result = this.mapAll(set);
-			
-		} catch(Exception ex) {
-			
-			ex.printStackTrace();
-			
-		} finally {
-			
-			if(set != null) set.close();
-			if(stm != null) stm.close();
-			
-		} return result;
-		
-	}
-	
-	private List<BaseModel> fullTextSearch(String keywords) throws Exception{
-		
-		String cond = " WHERE MATCH(description) AGAINST (? IN BOOLEAN MODE)";
-		String query = "SELECT * FROM Matter" + cond;
-		System.out.println(query);
-		PreparedStatement stm = null;
-		
-		return this.executeFullText(stm, query, keywords);
-		
-	}
-
 	@Override
 	public List findAllByFullText(Class<?> modelClass, String keywords) throws Exception {
-		
-		List<BaseModel> result = new ArrayList<>();
-		
-		if(keywords != null) {
-			
-			result = this.fullTextSearch(keywords);
-			
-		} return result;
-		
+		throw new DAOException("findAllByFullText doesn't work here . Please Use findAll !");
+						
 	}
+	
 	
 }
