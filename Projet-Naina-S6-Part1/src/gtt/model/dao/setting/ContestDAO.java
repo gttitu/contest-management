@@ -51,12 +51,16 @@ public class ContestDAO implements InterfaceDAO{
 		    }
 			else			
 				throw new DAOException("Incorrect type of model in parameter !");
-			return result;
-		} finally {
+			
+		} 
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
 		}
-		
+		return result;
 		
 		
 	}
@@ -81,11 +85,16 @@ public class ContestDAO implements InterfaceDAO{
 			}
 			else			
 				throw new DAOException("Incorrect type of model in parameter !");   
-			return result;
-		} finally {
+			
+		} 
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
 		}
+		return result;
 	}
 
 	@Override
@@ -103,15 +112,19 @@ public class ContestDAO implements InterfaceDAO{
 			else			
 				throw new DAOException("Incorrect type of model in parameter !");  	
 			
-		    return result;
-		} finally {
+		   
+		} 
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
 		}
+		return result;
 	}
 
-			
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")		
 	@Override
 	public void findById(BaseModel model)throws Exception {
 		
@@ -124,17 +137,6 @@ public class ContestDAO implements InterfaceDAO{
 	}
 
 	private List<BaseModel> mapAll(ResultSet set) throws SQLException, ModelException{
-		
-		List<BaseModel> result = new ArrayList<>();
-		
-		while(set.next()) {
-				result.add(new Contest(set.getInt("id"), set.getString("description"), set.getBoolean("finished"), set.getDate("dateBegin").toString(), set.getDate("dateEnd").toString()));
-		} 
-		return result;
-		
-	}
-	
-	private List<BaseModel> mapAllInCache(ResultSet set) throws SQLException, ModelException{
 		
 		List<BaseModel> result = new ArrayList<>();
 		
@@ -167,14 +169,18 @@ public class ContestDAO implements InterfaceDAO{
 				throw new DAOException("Incorrect type of model in parameter !");
 				
 			}
-			return result;
-		} finally {
+			
+		} 
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
 			if(set!=null)
 				set.close();
 			if(stm!=null)
 				stm.close();
 		}
-		
+		return result;
 		
 		
 	}
@@ -191,7 +197,7 @@ public class ContestDAO implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
-	// GIMMY METHODS FOR FULL TEXT :
+	// METHODS FOR FULL TEXT :
 	
 	private List<BaseModel> executeFullText(PreparedStatement stm, String query, String keywords) throws Exception{
 		
@@ -242,6 +248,7 @@ public class ContestDAO implements InterfaceDAO{
 		
 	}
 	
-	// GIMMY METHODS FOR FULL TEXT - END
+	// METHODS FOR FULL TEXT - END
 	
+		
 }
