@@ -80,8 +80,8 @@ CREATE TABLE RoomDetail(
 
 CREATE TABLE Mark (
 	id INT NOT NULL AUTO_INCREMENT,
-	candidate INT UNSIGNED,
-	matter INT UNSIGNED,
+	candidate INT,
+	matter INT,
 	markValue DECIMAL(5, 2),
 	PRIMARY KEY(id),
 	FOREIGN KEY(candidate) REFERENCES Candidate(id),
@@ -90,8 +90,8 @@ CREATE TABLE Mark (
 
 CREATE TABLE Deliberation (
 	id INT NOT NULL AUTO_INCREMENT,
-	center INT UNSIGNED,
-	matter INT UNSIGNED,
+	center INT,
+	matter INT,
 	markValue DECIMAL(5, 2),
 	PRIMARY KEY(id),
 	FOREIGN KEY(center) REFERENCES Center(id),
