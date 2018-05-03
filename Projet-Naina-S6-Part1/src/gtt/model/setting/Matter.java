@@ -16,6 +16,8 @@ public class Matter extends BaseModel{
 	
 	// CONSTRUCTORS :
 	
+	public Matter() {}
+	
 	public Matter(Integer contest, String description, Integer coefficient, Float average, String datetimeBegin, String datetimeEnd) throws ModelException{
 		this.setContest(contest);
 		this.setDescription(description);

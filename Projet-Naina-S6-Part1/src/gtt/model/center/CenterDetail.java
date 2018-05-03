@@ -80,6 +80,13 @@ public class CenterDetail  extends BaseModel {
 		else
 			throw new ModelException("Invalid value on maxAge : " + maxAge + " !");
 	}
+
+	@Override
+	public String toString() {
+		return "CenterDetail [center=" + center + ", nbMen=" + nbMen + ", nbWomen=" + nbWomen + ", minAge=" + minAge
+				+ ", maxAge=" + maxAge + ", id=" + id + "]";
+	}
+	
 	
 	
 }

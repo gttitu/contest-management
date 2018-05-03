@@ -399,7 +399,6 @@ public class GenericDAO implements InterfaceDAO {
 		if(!cond2.equals(""))
 			cond = cond1 + cond2 + cond3;
 		String query = "SELECT * FROM " + UtilsDAO.getTableName(modelClass) + cond;
-		System.out.println(query);
 		PreparedStatement stm = null;
 		
 		return this.executeFullText(stm, modelClass, query, keywords);
@@ -414,7 +413,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		if(keywords != null) {
 			
-			result = this.fullTextSearch(modelClass, keywords);
+			result = this.fullTextSearch(modelClass, "*" + keywords + "*");
 			
 		} return result;
 		

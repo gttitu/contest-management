@@ -14,6 +14,8 @@ public class Center extends BaseModel {
 		
 		//CONSTRUCTORS :
 		
+		public Center() {}
+		
 		public Center(Integer contest, String description, String location, Integer nbAllowable)  throws ModelException{
 			this.setContest(contest);
 			this.setDescription(description);
@@ -61,5 +63,13 @@ public class Center extends BaseModel {
 			else
 				throw new ModelException("Invalid value on nbAllowable : " + nbAllowable + " !");
 		}
+
+		@Override
+		public String toString() {
+			return "Center [contest=" + contest + ", description=" + description + ", location=" + location
+					+ ", nbAllowable=" + nbAllowable + ", id=" + id + "]";
+		}
+		
+		
 		
 	}

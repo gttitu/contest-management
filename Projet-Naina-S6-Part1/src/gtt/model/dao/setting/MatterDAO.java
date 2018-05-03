@@ -227,7 +227,6 @@ public class MatterDAO  implements InterfaceDAO{
 		
 		String cond = " WHERE MATCH(description) AGAINST (? IN BOOLEAN MODE)";
 		String query = "SELECT * FROM Matter" + cond;
-		System.out.println(query);
 		PreparedStatement stm = null;
 		
 		return this.executeFullText(stm, query, keywords);
@@ -241,7 +240,7 @@ public class MatterDAO  implements InterfaceDAO{
 		
 		if(keywords != null) {
 			
-			result = this.fullTextSearch(keywords);
+			result = this.fullTextSearch("*" + keywords + "*");
 			
 		} return result;
 		

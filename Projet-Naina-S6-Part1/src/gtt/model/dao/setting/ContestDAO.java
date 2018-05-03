@@ -228,7 +228,6 @@ public class ContestDAO implements InterfaceDAO{
 		
 		String cond = " WHERE MATCH(description) AGAINST (? IN BOOLEAN MODE)";
 		String query = "SELECT * FROM Contest" + cond;
-		System.out.println(query);
 		PreparedStatement stm = null;
 		
 		return this.executeFullText(stm, query, keywords);
@@ -242,7 +241,7 @@ public class ContestDAO implements InterfaceDAO{
 		
 		if(keywords != null) {
 			
-			result = this.fullTextSearch(keywords);
+			result = this.fullTextSearch("*" + keywords + "*");
 			
 		} return result;
 		
