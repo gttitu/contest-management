@@ -64,6 +64,14 @@ public class Contest extends BaseModel{
 	public void setFinished(boolean finished) {
 		this.finished = finished;
 	}
+
+	@Override
+	public String toString() {
+		return "Contest [description=" + description + ", finished=" + finished + ", dateBegin=" + dateBegin
+				+ ", dateEnd=" + dateEnd + ", id=" + id + "]";
+	}
+	
+	
 	
 
 }

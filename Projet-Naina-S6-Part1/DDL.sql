@@ -110,6 +110,3 @@ ADD FULLTEXT matterIndex (description);
 
 ALTER TABLE Center
 ADD FULLTEXT centerIndex (description, location);
-
-ALTER TABLE CandidateDetail
-ADD FULLTEXT candidateDetailIndex (firstname, lastname);
