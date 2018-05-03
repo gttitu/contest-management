@@ -19,5 +19,6 @@ public interface InterfaceDAO {
 	List findAll(BaseModel baseCond, String specCond) throws Exception;
 	
 	List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception;
-
+	
+	List findAllByFullText(Class<?> modelClass, String keywords) throws Exception;
 }

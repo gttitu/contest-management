@@ -183,7 +183,7 @@ public class MarkDAO implements InterfaceDAO{
 		}
 		@SuppressWarnings({ "rawtypes", "unused" })
 		@Override
-		public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+		public List findAllByFullText(Class<?> modelClass, String keywords) throws Exception {
 			// TODO Auto-generated method stub
 			if(true) throw new DAOException("Full text search can't be use here !");
 			return null;

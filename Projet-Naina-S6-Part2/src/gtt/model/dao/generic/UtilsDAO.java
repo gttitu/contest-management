@@ -8,6 +8,7 @@ import java.util.List;
 
 import gtt.annotation.CondOperator;
 import gtt.annotation.DbTable;
+import gtt.annotation.ForFullText;
 import gtt.annotation.NotTableAttr;
 import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
@@ -169,6 +170,20 @@ public class UtilsDAO {
 			
 			Object tmp = getValueOf(model, f);
 			if(tmp != null)
+				result.add(f);
+			
+		} return result;
+		
+	}
+	
+	public static List<Field> getAttrForFullText(Class<?> modelClass) throws Exception{
+		
+		List<Field> result = new ArrayList<>();
+		
+		List<Field> attrs = UtilsDAO.getAttributesWithoutId((BaseModel)modelClass.newInstance());
+		for(Field f : attrs) {
+			
+			if(f.isAnnotationPresent(ForFullText.class))
 				result.add(f);
 			
 		} return result;

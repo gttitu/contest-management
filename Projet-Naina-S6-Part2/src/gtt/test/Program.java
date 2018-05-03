@@ -25,7 +25,8 @@ public class Program {
 			//findAll(dao);
 			//save(dao);
 			//update(dao);
-			delete(dao);
+			//delete(dao);
+			findByFullText(dao);
 			
 		} catch (Exception e) {
 			
@@ -89,6 +90,22 @@ public class Program {
 		
 		Candidate model = new Candidate(6, 3);
 		dao.delete(model);
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	static void findByFullText(GenericDAO dao) throws Exception{
+		
+		dao.findAllByFullText(CandidateDetail.class, "Irving Renaud").forEach(new Consumer<CandidateDetail>() {
+
+			@Override
+			public void accept(CandidateDetail t) {
+				
+				System.out.println(t);
+				
+			}
+			
+		});
 		
 	}
 

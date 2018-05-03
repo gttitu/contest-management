@@ -97,6 +97,7 @@ CREATE TABLE Deliberation (
 	FOREIGN KEY(center) REFERENCES Center(id),
 	FOREIGN KEY(matter) REFERENCES Matter(id)
 )Engine=InnoDB;
+
 -- FullText
 ALTER TABLE CandidateDetail
 ADD FULLTEXT candidateDetailIndex (firstname, lastname);
@@ -109,3 +110,6 @@ ADD FULLTEXT matterIndex (description);
 
 ALTER TABLE Center
 ADD FULLTEXT centerIndex (description, location);
+
+ALTER TABLE CandidateDetail
+ADD FULLTEXT candidateDetailIndex (firstname, lastname);

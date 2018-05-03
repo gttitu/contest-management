@@ -356,6 +356,70 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
+	private String getCondForMatch(Class<?> modelClass) throws Exception {
+		
+		String result = "";
+		
+		List<Field> attrs = UtilsDAO.getAttrForFullText(modelClass);
+		for(int i = 0, size = attrs.size(); i < size; i++) {
+			
+			result += UtilsDAO.getAttrName(attrs.get(i));
+			if(i < size - 1)
+				result += ", ";
+			
+		} return result;
+		
+	}
+	
+	private List<BaseModel> executeFullText(PreparedStatement stm, Class<?> modelClass, String query, String keywords) throws Exception{
+		
+		List<BaseModel> result = new ArrayList<>();
+		
+		try {
+			
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, keywords);
+			result = this.mapAll(modelClass, stm);
+			
+		} catch(Exception ex) {
+			
+			ex.printStackTrace();
+			
+		} finally {
+			
+			if(stm != null) stm.close();
+			
+		} return result;
+		
+	}
+	
+	private List<BaseModel> fullTextSearch(Class<?> modelClass, String keywords) throws Exception{
+		
+		String cond = "", cond1 = " WHERE MATCH(", cond2 = this.getCondForMatch(modelClass), cond3 = ") AGAINST (? IN BOOLEAN MODE)";
+		if(!cond2.equals(""))
+			cond = cond1 + cond2 + cond3;
+		String query = "SELECT * FROM " + UtilsDAO.getTableName(modelClass) + cond;
+		System.out.println(query);
+		PreparedStatement stm = null;
+		
+		return this.executeFullText(stm, modelClass, query, keywords);
+		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List findAllByFullText(Class<?> modelClass, String keywords) throws Exception {
+		
+		List<BaseModel> result = new ArrayList<>();
+		
+		if(keywords != null) {
+			
+			result = this.fullTextSearch(modelClass, keywords);
+			
+		} return result;
+		
+	}
+	
 	// METHODS :
 	
 	protected String writeConditionWith(BaseModel model, Field attribute) {
