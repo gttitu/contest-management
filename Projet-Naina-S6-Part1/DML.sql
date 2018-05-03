@@ -20,6 +20,7 @@ INSERT INTO CenterDetail  (center, nbMen, nbWomen , minAge, maxAge ) VALUES
 	(2, 100, 90, 18, 50),
 	(3, 80, 20, 16, 60);
 	
+
 -- Gimmy
 
 INSERT INTO Candidate(idCenter) VALUES(1);
@@ -44,3 +45,19 @@ INSERT INTO RoomDetail(idRoom, idCandidate) VALUES(2, 2);
 INSERT INTO RoomDetail(idRoom, idCandidate) VALUES(3, 3);
 INSERT INTO RoomDetail(idRoom, idCandidate) VALUES(4, 4);
 INSERT INTO RoomDetail(idRoom, idCandidate) VALUES(3, 5);
+
+--Toavina
+INSERT INTO Mark (candidate, matter, markValue) VALUES
+	(1, 1 , 12.5),
+	(1, 2 , 15),
+	(2, 2 , 16),
+	(3, 4 , 9),
+	(4, 3, 8);
+	
+INSERT INTO Deliberation (center, matter, markValue) VALUES	
+	(1, 1 , 16),
+	(2, 1 , 18),
+	(3, 1 , 15),
+	(3, 2 , 15);
+	
+	
