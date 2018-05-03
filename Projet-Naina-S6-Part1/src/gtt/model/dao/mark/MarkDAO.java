@@ -110,6 +110,8 @@ public class MarkDAO implements InterfaceDAO{
 			}
 			
 		}
+		
+		@SuppressWarnings("unchecked")
 		@Override
 		public void findById(BaseModel model) throws Exception {
 			
@@ -122,6 +124,7 @@ public class MarkDAO implements InterfaceDAO{
 			}
 			
 		}
+		
 		private List<BaseModel> mapAll(ResultSet set) throws SQLException, ModelException{
 			
 			List<BaseModel> result = new ArrayList<>();
@@ -133,6 +136,8 @@ public class MarkDAO implements InterfaceDAO{
 			} return result;
 			
 		}
+		
+		@SuppressWarnings("rawtypes")
 		@Override
 		public List findAll(BaseModel baseCond, String specCond) throws Exception {
 			
@@ -162,6 +167,8 @@ public class MarkDAO implements InterfaceDAO{
 			}			
 			
 		}
+		
+		@SuppressWarnings("rawtypes")
 		@Override
 		public List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
 			
@@ -173,5 +180,12 @@ public class MarkDAO implements InterfaceDAO{
 			
 			return this.findAll(baseCond, specCond);
 			
+		}
+		@SuppressWarnings({ "rawtypes", "unused" })
+		@Override
+		public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+			// TODO Auto-generated method stub
+			if(true) throw new DAOException("Full text search can't be use here !");
+			return null;
 		}
 }

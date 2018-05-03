@@ -114,6 +114,7 @@ public class MatterDAO  implements InterfaceDAO{
 	}
 
 			
+	@SuppressWarnings("unchecked")
 	@Override
 	public void findById(BaseModel model)throws Exception {
 		
@@ -140,6 +141,7 @@ public class MatterDAO  implements InterfaceDAO{
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List findAll(BaseModel baseCond, String specCond) throws Exception {
 		List result = new ArrayList<>();
@@ -170,6 +172,7 @@ public class MatterDAO  implements InterfaceDAO{
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List findAll(int page, int row, BaseModel baseCond, String specCond) throws Exception {
 		int offset = (page - 1) * row;
@@ -181,6 +184,7 @@ public class MatterDAO  implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
 		
