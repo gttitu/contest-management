@@ -1,6 +1,7 @@
 package gtt.model.candidate;
 
 import gtt.annotation.DbTable;
+import gtt.annotation.ForFullText;
 import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
@@ -13,9 +14,11 @@ public class CandidateDetail extends BaseModel {
 	@TableAttr(name = "idCandidate")
 	private Integer candidate;
 	
+	@ForFullText
 	@TableAttr(name = "firstname")
 	private String firstname;
 	
+	@ForFullText
 	@TableAttr(name = "lastname")
 	private String lastname;
 	

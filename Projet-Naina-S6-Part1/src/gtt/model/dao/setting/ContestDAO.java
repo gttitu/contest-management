@@ -191,46 +191,57 @@ public class ContestDAO implements InterfaceDAO{
 		return this.findAll(baseCond, specCond);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List findAllByFullText(BaseModel baseCond, String keywords) throws Exception {
+	// GIMMY METHODS FOR FULL TEXT :
+	
+	private List<BaseModel> executeFullText(PreparedStatement stm, String query, String keywords) throws Exception{
 		
-		List result = new ArrayList<>();
-		PreparedStatement stm = null;
+		List<BaseModel> result = new ArrayList<>();
 		ResultSet set = null;
+		
 		try {
 			
-			if(baseCond == null) {
+			stm = this.connection.prepareStatement(query);
+			stm.setObject(1, keywords);
+			set = stm.executeQuery();
+			result = this.mapAll(set);
 			
-				String query = "SELECT * FROM Contest";
-				stm = null;
-				if(keywords != null){
-					keywords = "*"+ keywords + "*";
-					query += " WHERE MATCH (description) AGAINST (? IN BOOLEAN MODE)";
-					stm = this.connection.prepareStatement(query);
-					stm.setObject(1, keywords);
-					
-				} else{
-				
-					stm = this.connection.prepareStatement(query);
-				
-				} set = stm.executeQuery();
-				result = this.mapAll(set);
+		} catch(Exception ex) {
 			
-			} else {
-				
-				throw new DAOException("BaseCond doesn't work here . Use specCond for this approach !");
-				
-			} 
-			return result;
+			ex.printStackTrace();
+			
 		} finally {
-			if(set!=null)
-				set.close();
-			if(stm!=null)
-				stm.close();
-		}
+			
+			if(set != null) set.close();
+			if(stm != null) stm.close();
+			
+		} return result;
 		
 	}
 	
+	private List<BaseModel> fullTextSearch(String keywords) throws Exception{
+		
+		String cond = " WHERE MATCH(description) AGAINST (? IN BOOLEAN MODE)";
+		String query = "SELECT * FROM Contest" + cond;
+		System.out.println(query);
+		PreparedStatement stm = null;
+		
+		return this.executeFullText(stm, query, keywords);
+		
+	}
+
+	@Override
+	public List findAllByFullText(Class<?> modelClass, String keywords) throws Exception {
+		
+		List<BaseModel> result = new ArrayList<>();
+		
+		if(keywords != null) {
+			
+			result = this.fullTextSearch(keywords);
+			
+		} return result;
+		
+	}
+	
+	// GIMMY METHODS FOR FULL TEXT - END
 	
 }
