@@ -86,6 +86,12 @@ public class CenterDetail  extends BaseModel {
 		return "CenterDetail [center=" + center + ", nbMen=" + nbMen + ", nbWomen=" + nbWomen + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", id=" + id + "]";
 	}
+
+	@Override
+	public void copy(BaseModel toCopy) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

@@ -16,5 +16,9 @@ public abstract class BaseModel {
 		else
 			throw new ModelException("Invalid value on ID : " + id + " !");
 	}
+	
+	// METHODS TO DEFINE :
+	
+	public abstract void copy(BaseModel toCopy) throws Exception;
 
 }

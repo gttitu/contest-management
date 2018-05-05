@@ -65,6 +65,12 @@ public class RoomDetail extends BaseModel{
 	public String toString() {
 		return "RoomDetail [room=" + room + ", candidate=" + candidate + ", id=" + id + "]";
 	}
+
+	@Override
+	public void copy(BaseModel toCopy) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	// STATIC METHODS :
 	

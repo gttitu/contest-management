@@ -69,6 +69,12 @@ public class Center extends BaseModel {
 			return "Center [contest=" + contest + ", description=" + description + ", location=" + location
 					+ ", nbAllowable=" + nbAllowable + ", id=" + id + "]";
 		}
+
+		@Override
+		public void copy(BaseModel toCopy) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		
 		
