@@ -1,2 +1,0 @@
-Vous devez ajouter le fichier "mysql-connector-java-5.1.46-bin.jar" a votre projet grace a votre IDE ( ex : sous ECLIPSE , 
-on clique droit sur le projet , on choisit "build path" , puis "add external archives" et voila , vous etes pret a utiliser mysql avec java ) .
