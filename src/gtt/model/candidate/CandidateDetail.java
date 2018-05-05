@@ -108,6 +108,12 @@ public class CandidateDetail extends BaseModel {
 		return "CandidateDetail [candidate=" + candidate + ", firstname=" + firstname + ", lastname=" + lastname
 				+ ", age=" + age + ", gender=" + gender + ", id=" + id + "]";
 	}
+
+	@Override
+	public void copy(BaseModel toCopy) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	// STATIC METHODS :
 	

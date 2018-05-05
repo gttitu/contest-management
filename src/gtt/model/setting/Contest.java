@@ -70,6 +70,12 @@ public class Contest extends BaseModel{
 		return "Contest [description=" + description + ", finished=" + finished + ", dateBegin=" + dateBegin
 				+ ", dateEnd=" + dateEnd + ", id=" + id + "]";
 	}
+
+	@Override
+	public void copy(BaseModel toCopy) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

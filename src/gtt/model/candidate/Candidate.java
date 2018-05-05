@@ -49,6 +49,12 @@ public class Candidate extends BaseModel {
 	public String toString() {
 		return "Candidate [center=" + center + ", id=" + id + "]";
 	}
+
+	@Override
+	public void copy(BaseModel toCopy) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	// STATIC METHODS :
 	

@@ -93,6 +93,12 @@ public class Matter extends BaseModel{
 				+ ", average=" + average + ", datetimeBegin=" + datetimeBegin + ", datetimeEnd=" + datetimeEnd + ", id="
 				+ id + "]";
 	}
+
+	@Override
+	public void copy(BaseModel toCopy) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
