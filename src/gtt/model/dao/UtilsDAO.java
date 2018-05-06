@@ -155,10 +155,9 @@ public class UtilsDAO {
 		
 		String result = attribute.getName();
 		
-		Class<?> attrClass = attribute.getType();
-		if(attrClass.isAnnotationPresent(TableAttr.class)) {
+		if(attribute.isAnnotationPresent(TableAttr.class)) {
 			
-			TableAttr attr = attrClass.getAnnotation(TableAttr.class);
+			TableAttr attr = attribute.getAnnotation(TableAttr.class);
 			result = attr.name();
 			
 		} return result;
