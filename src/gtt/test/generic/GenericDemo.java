@@ -6,22 +6,24 @@ import java.util.function.Consumer;
 
 import gtt.model.BaseModel;
 import gtt.model.candidate.Candidate;
+import gtt.model.setting.Contest;
 import gtt.model.candidate.CandidateDetail;
 import gtt.model.center.Room;
+import gtt.model.center.RoomDetail;
 import gtt.model.dao.generic.GenericDAO;
+import gtt.model.dao.ConnUtils;
 
 @SuppressWarnings("unused")
 public class GenericDemo {
 	
 	public static void main(String[] args) {
 		
-		System.out.println("**********************************************");
+		System.out.println("*********************Generic*************************");
 		
-		GenericDAO dao = new GenericDAO(null, true);
 		try {
-			
+			GenericDAO dao = new GenericDAO(true);
 			//findAll(dao);
-			//save(dao);
+			//save(dao)
 			//update(dao);
 			//delete(dao);
 			//findByFullText(dao);
@@ -46,14 +48,22 @@ public class GenericDemo {
 	@SuppressWarnings("unchecked")
 	static void findAll(GenericDAO dao) throws Exception {
 		
-		List<Room> rooms = dao.findAll(2, 2, new Room(), null);
+		/*List<Room> rooms = dao.findAll(2, 2, new Room(), null);
 		rooms.forEach(new Consumer<Room>() {
 
 			@Override
 			public void accept(Room t) {
 				System.out.println(t);
 			}
-		});
+		});*/
+		List<RoomDetail> rooms = dao.findAll(2, 2, new RoomDetail(), null);
+		rooms.forEach(new Consumer<RoomDetail>() {
+
+			@Override
+			public void accept(RoomDetail t) {
+				System.out.println(t);
+			}
+		});		
 		
 	}
 	
