@@ -18,10 +18,10 @@ public class GenericDemo {
 	
 	public static void main(String[] args) {
 		
-		System.out.println("*********************Generic*************************");
-		
 		try {
+			
 			GenericDAO dao = new GenericDAO(true);
+			//findById(dao);
 			//findAll(dao);
 			//save(dao)
 			//update(dao);
@@ -63,6 +63,7 @@ public class GenericDemo {
 			public void accept(RoomDetail t) {
 				System.out.println(t);
 			}
+			
 		});		
 		
 	}

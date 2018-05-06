@@ -2,6 +2,7 @@ package gtt.model.dao.generic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -97,20 +98,29 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
+	protected void loopForExecuteSave(List<Field> attributes, BaseModel model, PreparedStatement stm) throws Exception {
+		
+		for(int i = 0, size = attributes.size(); i < size; i++) {
+			
+			Object value = this.getValueOf(model, attributes.get(i));
+			stm.setObject((i+1), value);
+			
+		}
+		
+	}
+	
 	protected int executeSave(BaseModel model, String query, List<Field> attributes) throws Exception{
 		
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement stm = null;
 		
 		try {
 			
-			stm = ConnUtils.get().prepareStatement(query);
-			for(int i = 0, size = attributes.size(); i < size; i++) {
-				
-				Object value = this.getValueOf(model, attributes.get(i));
-				stm.setObject((i+1), value);
-				
-			} result = stm.executeUpdate();
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
+			this.loopForExecuteSave(attributes, model, stm);
+			result = stm.executeUpdate();
 			
 		} catch(Exception ex) {
 			
@@ -119,25 +129,34 @@ public class GenericDAO implements InterfaceDAO {
 		} finally{
 			
 			if(stm != null) stm.close();
+			if(connection != null) connection.close();
 			
 		} return result;
+		
+	}
+	
+	protected void loopForExecuteUpdate(List<Field> attributes, BaseModel model, PreparedStatement stm) throws Exception{
+		
+		for(int i = 0, size = attributes.size(); i < size; i++) {
+			
+			Object value = this.getValueOf(model, attributes.get(i));
+			stm.setObject((i+1), value);
+			
+		} stm.setObject(attributes.size() + 1, model.getId());
 		
 	}
 	
 	protected int executeUpdate(BaseModel model, String query, List<Field> attributes) throws Exception {
 		
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement stm = null;
 		
 		try {
 		
-			stm = ConnUtils.get().prepareStatement(query);
-			for(int i = 0, size = attributes.size(); i < size; i++) {
-				
-				Object value = this.getValueOf(model, attributes.get(i));
-				stm.setObject((i+1), value);
-				
-			} stm.setObject(attributes.size() + 1, model.getId());
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
+			this.loopForExecuteUpdate(attributes, model, stm);
 			result = stm.executeUpdate();
 		
 		} catch(Exception ex) {
@@ -147,6 +166,7 @@ public class GenericDAO implements InterfaceDAO {
 		} finally {
 			
 			if(stm != null) stm.close();
+			if(connection != null) connection.close();
 			
 		} return result;
 		
@@ -216,11 +236,13 @@ public class GenericDAO implements InterfaceDAO {
 		
 		int result = -1;
 		String query = "DELETE FROM " + UtilsDAO.getTableName(model.getClass()) + " WHERE id = ?";
+		Connection connection = null;
 		PreparedStatement stm = null;
 		
 		try {
 		
-			stm = ConnUtils.get().prepareStatement(query);
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
 			stm.setObject(1, model.getId());
 			result = stm.executeUpdate();
 		
@@ -231,12 +253,13 @@ public class GenericDAO implements InterfaceDAO {
 		} finally {
 			
 			if(stm != null) stm.close();
+			if(connection != null) connection.close();
 			
 		} return result;
 		
 	}
 	
-	protected void mapById(BaseModel model, BaseModel tmp) throws Exception {
+	protected void loopForMapById(BaseModel model, BaseModel tmp) throws Exception {
 		
 		List<Field> attributes = UtilsDAO.getAttributesWithoutId(model);
 		for(Field f : attributes) {
@@ -254,15 +277,53 @@ public class GenericDAO implements InterfaceDAO {
 		}
 		
 	}
+	
+	protected void mapById(BaseModel model, PreparedStatement stm) throws Exception {
+		
+		ResultSet reader = null;
+		
+		try {
+			
+			BaseModel tmp = null;
+			reader = stm.executeQuery();
+			if(reader.next()) tmp = this.map(model.getClass(), reader);
+			if(tmp != null) this.loopForMapById(model, tmp);
+		
+		} catch(Exception ex) {
+			
+			throw ex;
+			
+		} finally {
+			
+			if(reader != null) reader.close();
+			
+		}
+		
+	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void findById(BaseModel model) throws Exception {
 		
-		List<BaseModel> models = this.findAll(model, null);
-		if(models != null && models.size() == 1){
-			BaseModel tmp = models.get(0);
-			this.mapById(model, tmp);
+		String query = "SELECT * FROM " + UtilsDAO.getTableName(model.getClass()) + " WHERE id = ?";
+		Connection connection = null;
+		PreparedStatement stm = null;
+		
+		try {
+			
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
+			stm.setObject(1, model.getId());
+			this.mapById(model, stm);
+			
+		} catch(Exception ex) {
+			
+			throw ex;
+			
+		} finally {
+			
+			if(stm != null) stm.close();
+			if(connection != null) connection.close();
+			
 		}
 		
 	}
@@ -285,6 +346,18 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
+	protected void loopForMapAll(ResultSet reader, Class<?> modelClass, List<BaseModel> result) throws Exception{
+		
+		while(reader.next()) {
+			
+			BaseModel tmp = this.map(modelClass, reader);
+			if(tmp != null)
+				result.add(tmp);
+			
+		} 
+		
+	}
+	
 	protected List<BaseModel> mapAll(Class<?> modelClass, PreparedStatement stm) throws Exception{
 		
 		List<BaseModel> result = new ArrayList<>();
@@ -293,13 +366,7 @@ public class GenericDAO implements InterfaceDAO {
 		try {
 		
 			reader = stm.executeQuery();
-			while(reader.next()) {
-				
-				BaseModel tmp = this.map(modelClass, reader);
-				if(tmp != null)
-					result.add(tmp);
-				
-			} 
+			this.loopForMapAll(reader, modelClass, result);
 		
 		} catch(Exception ex) {
 			
@@ -319,11 +386,13 @@ public class GenericDAO implements InterfaceDAO {
 		
 		List<BaseModel> result = new ArrayList<>();
 		String query = "SELECT * FROM " + UtilsDAO.getTableName(baseCond.getClass()) + this.buildCondition(baseCond, specCond);
+		Connection connection = null;
 		PreparedStatement stm = null;
 		
 		try {
 			
-			stm = ConnUtils.get().prepareStatement(query);
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
 			result = this.mapAll(baseCond.getClass(), stm);
 			
 		} catch(Exception ex) {
@@ -333,6 +402,7 @@ public class GenericDAO implements InterfaceDAO {
 		} finally {
 			
 			if(stm != null) stm.close();
+			if(connection != null) connection.close();
 			
 		} return result;
 		
@@ -367,13 +437,16 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
-	private List<BaseModel> executeFullText(PreparedStatement stm, Class<?> modelClass, String query, String keywords) throws Exception{
+	private List<BaseModel> executeFullText(Class<?> modelClass, String query, String keywords) throws Exception{
 		
 		List<BaseModel> result = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement stm = null;
 		
 		try {
 			
-			stm = ConnUtils.get().prepareStatement(query);
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
 			stm.setObject(1, keywords);
 			result = this.mapAll(modelClass, stm);
 			
@@ -384,6 +457,7 @@ public class GenericDAO implements InterfaceDAO {
 		} finally {
 			
 			if(stm != null) stm.close();
+			if(connection != null) connection.close();
 			
 		} return result;
 		
@@ -395,9 +469,8 @@ public class GenericDAO implements InterfaceDAO {
 		if(!cond2.equals(""))
 			cond = cond1 + cond2 + cond3;
 		String query = "SELECT * FROM " + UtilsDAO.getTableName(modelClass) + cond;
-		PreparedStatement stm = null;
 		
-		return this.executeFullText(stm, modelClass, query, keywords);
+		return this.executeFullText(modelClass, query, keywords);
 		
 	}
 	
@@ -427,20 +500,28 @@ public class GenericDAO implements InterfaceDAO {
 		
 	}
 	
+	protected void loopForGetPreparedQuery(List<Field> attributes, BaseModel model, PreparedStatement stm) throws Exception{
+		
+		for(int i = 0, size = attributes.size(); i < size; i++) {
+			
+			stm.setObject(i + 1, UtilsDAO.getValueOf(model, attributes.get(i)));
+			
+		}
+		
+	}
+	
 	protected String getPreparedQuery(String query, BaseModel model, List<Field> attributes) throws Exception {
 		
 		String result = null;
+		Connection connection = null;
 		PreparedStatement stm = null;
 		
 		try {
 		
-			stm = ConnUtils.get().prepareStatement(query);
-			for(int i = 0, size = attributes.size(); i < size; i++) {
-				
-				stm.setObject(i + 1, UtilsDAO.getValueOf(model, attributes.get(i)));
-				
-			} int index = stm.toString().indexOf(": ");
-			
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
+			this.loopForGetPreparedQuery(attributes, model, stm);
+			int index = stm.toString().indexOf(": ");
 			result = stm.toString().substring(index + 2);
 		
 		} catch(Exception ex) {
@@ -450,6 +531,7 @@ public class GenericDAO implements InterfaceDAO {
 		} finally {
 			
 			if(stm != null) stm.close();
+			if(connection != null) connection.close();
 			
 		} return result;
 		
