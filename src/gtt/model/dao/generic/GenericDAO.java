@@ -2,7 +2,6 @@ package gtt.model.dao.generic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -11,29 +10,25 @@ import java.util.List;
 import gtt.model.BaseModel;
 import gtt.model.dao.InterfaceDAO;
 import gtt.model.dao.UtilsDAO;
+import gtt.model.dao.ConnUtils;
 
 public class GenericDAO implements InterfaceDAO {
 	
 	// ATTRIBUTES :
 	
-	private Connection connection;
 	private boolean autoIncrement;
 	
 	// CONSTRUCTS :
 	
-	public GenericDAO(Connection connection, boolean autoIncrement) {
+	public GenericDAO(boolean autoIncrement) {
 		
-		this.setConnection(connection);
 		this.setAutoIncrement(autoIncrement);
 		
 	}
 	
 	// GETTERS AND SETTERS :
 	
-	public Connection getConnection() { return connection; }
-
-	public void setConnection(Connection connection) { this.connection = connection; }
-
+	
 	public boolean isAutoIncrement() { return autoIncrement; }
 
 	public void setAutoIncrement(boolean autoIncrement) { this.autoIncrement = autoIncrement; }
@@ -109,7 +104,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		try {
 			
-			stm = this.connection.prepareStatement(query);
+			stm = ConnUtils.get().prepareStatement(query);
 			for(int i = 0, size = attributes.size(); i < size; i++) {
 				
 				Object value = this.getValueOf(model, attributes.get(i));
@@ -119,7 +114,7 @@ public class GenericDAO implements InterfaceDAO {
 			
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally{
 			
@@ -136,7 +131,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		try {
 		
-			stm = this.connection.prepareStatement(query);
+			stm = ConnUtils.get().prepareStatement(query);
 			for(int i = 0, size = attributes.size(); i < size; i++) {
 				
 				Object value = this.getValueOf(model, attributes.get(i));
@@ -147,7 +142,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
@@ -225,13 +220,13 @@ public class GenericDAO implements InterfaceDAO {
 		
 		try {
 		
-			stm = this.connection.prepareStatement(query);
+			stm = ConnUtils.get().prepareStatement(query);
 			stm.setObject(1, model.getId());
 			result = stm.executeUpdate();
 		
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
@@ -308,7 +303,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
@@ -328,12 +323,12 @@ public class GenericDAO implements InterfaceDAO {
 		
 		try {
 			
-			stm = this.connection.prepareStatement(query);
+			stm = ConnUtils.get().prepareStatement(query);
 			result = this.mapAll(baseCond.getClass(), stm);
 			
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
@@ -378,13 +373,13 @@ public class GenericDAO implements InterfaceDAO {
 		
 		try {
 			
-			stm = this.connection.prepareStatement(query);
+			stm = ConnUtils.get().prepareStatement(query);
 			stm.setObject(1, keywords);
 			result = this.mapAll(modelClass, stm);
 			
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
@@ -439,7 +434,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		try {
 		
-			stm = this.connection.prepareStatement(query);
+			stm = ConnUtils.get().prepareStatement(query);
 			for(int i = 0, size = attributes.size(); i < size; i++) {
 				
 				stm.setObject(i + 1, UtilsDAO.getValueOf(model, attributes.get(i)));
@@ -450,7 +445,7 @@ public class GenericDAO implements InterfaceDAO {
 		
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
