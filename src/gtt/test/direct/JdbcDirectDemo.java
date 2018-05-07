@@ -20,7 +20,8 @@ public class JdbcDirectDemo {
 	public static void main(String[] args) {
 		
 		try {
-		
+			java.sql.Connection connection = ConnUtils.get();
+			requestContest(connection);
 			//requestContest(connection);
 			//requestMatter(connection);
 			//requestCenter(connection);
@@ -40,18 +41,36 @@ public class JdbcDirectDemo {
 	static void requestContest(java.sql.Connection connection) throws Exception {
 		
 		ContestDAO ctdao = new ContestDAO(connection);
-		ctdao.findAllByFullText(null, "magistrats* license* concours*").forEach(new Consumer<Contest>() {
-
+		CacheData cache = new CacheData();
+		cache.initCache(Duration.ofSeconds(5), true);
+		
+		//ctdao.findAllByFullText(null, "magistrats* license* concours*").forEach(new Consumer<Contest>() {
+		System.out.println("1er findAll");
+		ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
 			@Override
 			public void accept(Contest t) {
-				
 				System.out.println(t);
-				
 			}
-			
+		});
+		System.out.println("2e findAll");
+		ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
+			@Override
+			public void accept(Contest t) {
+				System.out.println(t);
+			}
+		});
+		Thread.sleep(10000);
+		System.out.println("3e findAll après 10 secs");
+		ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
+			@Override
+			public void accept(Contest t) {
+				System.out.println(t);
+			}
 		});
 		
+		
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	static void requestMatter(java.sql.Connection connection) throws Exception {

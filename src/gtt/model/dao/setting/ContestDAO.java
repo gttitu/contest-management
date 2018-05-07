@@ -250,5 +250,34 @@ public class ContestDAO implements InterfaceDAO{
 	
 	// METHODS FOR FULL TEXT - END
 	
-		
+	public List findAllFromCache(BaseModel model) throws Exception {
+		CacheData cache = new CacheData();
+		List result = new ArrayList<>();
+		String nameCache = "Contest-list";
+		Cacheonix cacheManager = Cacheonix.getInstance();
+		String key = "Contest-list";
+		if(this.isCorrect(model)) {
+			if(cacheManager.cacheExists(key + ".cache")) {
+				if(cache.isExpired()) {
+					cache.putAllInCache(this.findAll(model, null), nameCache);
+				}
+				result = cache.findAllFromCache(model, nameCache);
+			}else {
+				System.out.println("reading database");
+				result=this.findAll(model, null);
+				cache.putAllInCache(result, nameCache);
+			}
+		}
+		return result;
+	}
+	
+	public List findAll(BaseModel model) throws Exception {
+		CacheData cache = new CacheData();
+		List result = new ArrayList<>();
+		Cacheonix cacheManager = Cacheonix.getInstance();
+		if(cache.isEnabled())
+			return this.findAllFromCache(model);
+		else
+			return	this.findAll(model);
+	}	
 }

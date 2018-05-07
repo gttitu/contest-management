@@ -2,7 +2,7 @@ package gtt.model.setting;
 
 import gtt.model.*;
 
-public class Contest extends BaseModel{
+public class Contest extends BaseModel implements java.io.Serializable{{
 	
 	// ATTRIBUTES :
 	
