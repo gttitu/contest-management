@@ -10,17 +10,15 @@ import java.util.List;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
 import gtt.model.mark.Deliberation;
+import gtt.model.dao.ConnUtils;
 import gtt.model.dao.DAOException;
 import gtt.model.dao.InterfaceDAO;
 
 public class DeliberationDAO implements InterfaceDAO{
 	
 		//ATTRIBUTES:
-		private Connection connection;
 		//CONSTRUCTS:
-		public DeliberationDAO(Connection connection) {		
-			this.connection = connection;		
-		}
+			public DeliberationDAO() {}
 		// METHODS :
 			public boolean isCorrect(BaseModel model) {
 				
@@ -33,13 +31,14 @@ public class DeliberationDAO implements InterfaceDAO{
 			public int save(BaseModel model) throws Exception {
 
 				int result = -1;
+				Connection connection = null;
 				PreparedStatement stm = null;
 				try {
 					if(this.isCorrect(model)) {
-					
+						connection = ConnUtils.get();
 						Deliberation c = (Deliberation)model;
 						String query = "INSERT INTO Delibration(center, matter, markValue) VALUES(?, ?, ?)";
-						stm = this.connection.prepareStatement(query);
+						stm = connection.prepareStatement(query);
 						stm.setObject(1, c.getCenter());
 						stm.setObject(2, c.getMatter());
 						stm.setObject(3, c.getMarkValue());
@@ -49,25 +48,30 @@ public class DeliberationDAO implements InterfaceDAO{
 						
 						throw new DAOException("Incorrect type of model in parameter !");
 						
-					} return result;
+					}
+				}catch(Exception e) {
+					throw e;
 				}finally {
 					if(stm!=null) {
 						stm.close();}
+					if(connection!=null)
+						connection.close();
 				}
-				
+				return result;
 				
 			}
 			@Override
 			public int update(BaseModel model) throws Exception {
 				
 				int result = -1;
+				Connection connection = null;
 				PreparedStatement stm = null;	
 				try {
 					if(this.isCorrect(model)) {
-					
+						connection = ConnUtils.get();
 						Deliberation c = (Deliberation)model;
 						String query = "UPDATE Deliberation SET candidate = ?, matter = ?, markValue = ? WHERE id = ?";
-						stm = this.connection.prepareStatement(query);
+						stm = connection.prepareStatement(query);
 						stm.setObject(1, c.getCenter());
 						stm.setObject(2, c.getMatter());
 						stm.setObject(3, c.getMarkValue());
@@ -77,36 +81,45 @@ public class DeliberationDAO implements InterfaceDAO{
 						
 						throw new DAOException("Incorrect type of model in parameter !");
 						
-					}return result;
+					}
+				}catch(Exception e) {
+						throw e;
 				}
 				finally {
 					if(stm!=null) {
 						stm.close();}
+					if(connection!=null)
+						connection.close();
 				}
-				
+				return result;
 				
 			}
 			@Override
 			public int delete(BaseModel model) throws Exception {
 				
 				int result = -1;
+				Connection connection = null;
 				PreparedStatement stm = null;
 				try {	
 					if(this.isCorrect(model)) {
-					
+						connection = ConnUtils.get();
 						String query = "DELETE FROM Deliberation WHERE id = ?";
-						stm = this.connection.prepareStatement(query);
+						stm = connection.prepareStatement(query);
 						stm.setObject(1, model.getId());
 						result = stm.executeUpdate();
 						
 					} else {						
 						throw new DAOException("Incorrect type of model in parameter !");						
-					}return result;
+					}
+				}catch(Exception e) {
+					throw e;
 				}finally {
 						if(stm!=null) {
 							stm.close();}
+						if(connection!=null)
+							connection.close();
 				}
-				
+				return result;
 				
 			}
 			
@@ -141,15 +154,16 @@ public class DeliberationDAO implements InterfaceDAO{
 			public List findAll(BaseModel baseCond, String specCond) throws Exception {
 				
 				List result = new ArrayList<>();
+				Connection connection = null;
 				PreparedStatement stm = null;
 				ResultSet set = null;
 				try{
 					if(this.isCorrect(baseCond)) {
-				
+					connection = ConnUtils.get();
 					String query = "SELECT * FROM Deliberation";
 					if(specCond != null)
 						query += " " + specCond;
-					stm = this.connection.prepareStatement(query);
+					stm = connection.prepareStatement(query);
 					set = stm.executeQuery();
 					result = this.mapAll(set);
 				
@@ -157,14 +171,18 @@ public class DeliberationDAO implements InterfaceDAO{
 					
 					throw new DAOException("Incorrect type of model in parameter !");
 					
-				}return result;
+				}
+				}catch(Exception e) {
+					throw e;
 				}finally {
 					if(set!=null)
 						set.close();
 					if(stm!=null)
 						stm.close();
+					if(connection!=null)
+						connection.close();
 				}
-				
+				return result;
 			}
 			
 			@SuppressWarnings("rawtypes")

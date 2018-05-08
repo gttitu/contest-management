@@ -10,20 +10,17 @@ import java.util.List;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
 import gtt.model.center.CenterDetail;
+import gtt.model.dao.ConnUtils;
 import gtt.model.dao.DAOException;
 import gtt.model.dao.InterfaceDAO;
 
 public class CenterDetailDAO implements InterfaceDAO{
 	
 	// ATTRIBUTES :
-	
-		private Connection connection;
-		
+
 	// CONSTRUCTS :
 		
-	public CenterDetailDAO(Connection connection) {
-		this.connection = connection;
-	}
+	public CenterDetailDAO() {}
 	
 	// METHODS :
 	
@@ -35,14 +32,15 @@ public class CenterDetailDAO implements InterfaceDAO{
 	public int save(BaseModel model)throws Exception {
 		
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement preparedStmt = null;
 		try {
 			
 			if(this.isCorrect(model)) {
-			
+				connection = ConnUtils.get();
 				CenterDetail modelCenter = (CenterDetail) model;
 				String query = "Insert into CenterDetail (center, nbMen, nbWomen, minAge, maxAge) values (?, ?, ?, ?, ?)";
-				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt = connection.prepareStatement(query);
 				preparedStmt.setInt (1, modelCenter.getCenter());
 			    preparedStmt.setInt (2, modelCenter.getNbMen());
 			    preparedStmt.setInt(3, modelCenter.getNbWomen());
@@ -55,11 +53,14 @@ public class CenterDetailDAO implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
+			//e.printStackTrace();
 		}
 		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -67,14 +68,15 @@ public class CenterDetailDAO implements InterfaceDAO{
 	@Override
 	public int update(BaseModel model)throws Exception {
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement preparedStmt = null;
 		try {
 			
 			if(this.isCorrect(model)) {
-			
+				connection = ConnUtils.get();
 				CenterDetail modelCenter = (CenterDetail) model;
 				String query = "Update CenterDetail set center = ?, nbMen = ?, nbWomen = ?, minAge = ?, maxAge= ? where id = ? ";
-				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt = connection.prepareStatement(query);
 				preparedStmt.setInt (1, modelCenter.getCenter());
 			    preparedStmt.setInt (2, modelCenter.getNbMen());
 			    preparedStmt.setInt(3, modelCenter.getNbWomen());
@@ -88,11 +90,14 @@ public class CenterDetailDAO implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
+			//e.printStackTrace();
 		}
 		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -100,12 +105,14 @@ public class CenterDetailDAO implements InterfaceDAO{
 	@Override
 	public int delete(BaseModel model)throws Exception {
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement preparedStmt = null;	
 		try {
 			
 			if(this.isCorrect(model)) {
+				connection = ConnUtils.get();
 				String query = "Delete from CenterDetail where id = ?";
-				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt = connection.prepareStatement(query);
 				preparedStmt.setInt(1, model.getId());
 				result = preparedStmt.executeUpdate();
 			}
@@ -114,11 +121,14 @@ public class CenterDetailDAO implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
+			//e.printStackTrace();
 		}
 		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -154,16 +164,17 @@ public class CenterDetailDAO implements InterfaceDAO{
 	@Override
 	public List findAll(BaseModel baseCond, String specCond) throws Exception {
 		List result = new ArrayList<>();
+		Connection connection = null;
 		PreparedStatement stm = null;
 		ResultSet set = null;
 		try {
 			
 			if(this.isCorrect(baseCond)) {
-			
+				connection = ConnUtils.get();
 				String query = "SELECT * FROM CenterDetail";
 				if(specCond != null)
 					query += " " + specCond;
-				stm = this.connection.prepareStatement(query);
+				stm = connection.prepareStatement(query);
 				set = stm.executeQuery();
 				result = this.mapAll(set);
 			
@@ -175,13 +186,16 @@ public class CenterDetailDAO implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
+			//e.printStackTrace();
 		}
 		finally {
 			if(set!=null)
 				set.close();
 			if(stm!=null)
 				stm.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}

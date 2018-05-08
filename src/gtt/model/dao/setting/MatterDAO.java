@@ -9,6 +9,7 @@ import java.util.List;
 
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
+import gtt.model.dao.ConnUtils;
 import gtt.model.dao.DAOException;
 import gtt.model.dao.InterfaceDAO;
 import gtt.model.setting.*;
@@ -17,13 +18,13 @@ public class MatterDAO  implements InterfaceDAO{
 	
 	// ATTRIBUTES :
 	
-		private Connection connection;
+	//	private Connection connection;
 		
 	// CONSTRUCTS :
-		
-	public MatterDAO(Connection connection) {
+	public MatterDAO() {}
+	/*public MatterDAO(Connection connection) {
 		this.connection = connection;
-	}
+	}*/
 	
 	// METHODS :
 	
@@ -35,14 +36,15 @@ public class MatterDAO  implements InterfaceDAO{
 	public int save(BaseModel model)throws Exception {
 		
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement preparedStmt = null;
 		try {
 			
 			if(this.isCorrect(model)) {
-			
+				connection = ConnUtils.get();
 				Matter modelContest = (Matter) model;
 				String query = "Insert into Matter (contest, description, coefficient, average, datetimeBegin, datetimeEnd) values (?, ?, ?, ?, ?, ?)";
-				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt = connection.prepareStatement(query);
 				preparedStmt.setInt (1, modelContest.getContest());
 			    preparedStmt.setString (2, modelContest.getDescription());
 			    preparedStmt.setInt(3, modelContest.getCoefficient());
@@ -56,11 +58,13 @@ public class MatterDAO  implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -68,14 +72,15 @@ public class MatterDAO  implements InterfaceDAO{
 	@Override
 	public int update(BaseModel model)throws Exception {
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement preparedStmt = null;
 		try {
 			
 			if(this.isCorrect(model)) {
-			
+				connection = ConnUtils.get();
 				Matter modelContest = (Matter) model;
 				String query = "Update Matter set contest = ?, description = ?, coefficient = ?, average = ?, datetimeBegin = ?, datetimeEnd = ? where id = ? ";
-				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt = connection.prepareStatement(query);
 				preparedStmt.setInt (1, modelContest.getContest());
 			    preparedStmt.setString (2, modelContest.getDescription());
 			    preparedStmt.setInt(3, modelContest.getCoefficient());
@@ -90,11 +95,13 @@ public class MatterDAO  implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -102,12 +109,14 @@ public class MatterDAO  implements InterfaceDAO{
 	@Override
 	public int delete(BaseModel model)throws Exception {
 		int result = -1;
+		Connection connection = null;
 		PreparedStatement preparedStmt = null;	
 		try {
 			
 			if(this.isCorrect(model)) {
+				connection = ConnUtils.get();
 				String query = "Delete from Matter where id = ?";
-				preparedStmt = this.connection.prepareStatement(query);
+				preparedStmt = connection.prepareStatement(query);
 				preparedStmt.setInt(1, model.getId());
 				result = preparedStmt.executeUpdate();
 			}
@@ -116,11 +125,13 @@ public class MatterDAO  implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		finally {
 			if(preparedStmt!=null)
 				preparedStmt.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -157,16 +168,17 @@ public class MatterDAO  implements InterfaceDAO{
 	@Override
 	public List findAll(BaseModel baseCond, String specCond) throws Exception {
 		List result = new ArrayList<>();
+		Connection connection = null;
 		PreparedStatement stm = null;
 		ResultSet set = null;
 		try {
 			
 			if(this.isCorrect(baseCond)) {
-			
+				connection = ConnUtils.get();
 				String query = "SELECT * FROM Matter";
 				if(specCond != null)
 					query += " " + specCond;
-				stm = this.connection.prepareStatement(query);
+				stm = connection.prepareStatement(query);
 				set = stm.executeQuery();
 				result = this.mapAll(set);
 			
@@ -178,13 +190,15 @@ public class MatterDAO  implements InterfaceDAO{
 			
 		} 
 		catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		finally {
 			if(set!=null)
 				set.close();
 			if(stm!=null)
 				stm.close();
+			if(connection!=null)
+				connection.close();
 		}
 		return result;
 	}
@@ -204,23 +218,26 @@ public class MatterDAO  implements InterfaceDAO{
 	private List<BaseModel> executeFullText(PreparedStatement stm, String query, String keywords) throws Exception{
 		
 		List<BaseModel> result = new ArrayList<>();
+		Connection connection = null;
 		ResultSet set = null;
 		
 		try {
-			
-			stm = this.connection.prepareStatement(query);
+			connection = ConnUtils.get();
+			stm = connection.prepareStatement(query);
 			stm.setObject(1, keywords);
 			set = stm.executeQuery();
 			result = this.mapAll(set);
 			
 		} catch(Exception ex) {
 			
-			ex.printStackTrace();
+			throw ex;
 			
 		} finally {
 			
 			if(set != null) set.close();
 			if(stm != null) stm.close();
+			if(connection!=null)
+				connection.close();
 			
 		} return result;
 		
