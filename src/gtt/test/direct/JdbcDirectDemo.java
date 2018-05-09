@@ -14,6 +14,13 @@ import gtt.model.mark.Deliberation;
 import gtt.model.mark.Mark;
 import gtt.model.setting.Contest;
 import gtt.model.setting.Matter;
+import gtt.cache.*;
+import org.cacheonix.*;
+import gtt.model.dao.*;
+import gtt.model.dao.setting.*;
+import gtt.model.dao.center.*;
+import gtt.model.dao.mark.*;
+import java.time.*;
 
 public class JdbcDirectDemo {
 	
@@ -40,7 +47,7 @@ public class JdbcDirectDemo {
 	@SuppressWarnings("unchecked")
 	static void requestContest(java.sql.Connection connection) throws Exception {
 		
-		ContestDAO ctdao = new ContestDAO(connection);
+		ContestDAO ctdao = new ContestDAO();
 		CacheData cache = new CacheData();
 		cache.initCache(Duration.ofSeconds(5), true);
 		
@@ -75,7 +82,7 @@ public class JdbcDirectDemo {
 	@SuppressWarnings("unchecked")
 	static void requestMatter(java.sql.Connection connection) throws Exception {
 		
-		MatterDAO mtdao = new MatterDAO(connection);
+		MatterDAO mtdao = new MatterDAO();
 		mtdao.findAll(new Matter(), null).forEach(new Consumer<Matter>() {
 
 			@Override
@@ -92,7 +99,7 @@ public class JdbcDirectDemo {
 	@SuppressWarnings("unchecked")
 	static void requestCenter(java.sql.Connection connection) throws Exception{
 		
-		CenterDAO ctdao = new CenterDAO(connection);
+		CenterDAO ctdao = new CenterDAO();
 		ctdao.findAll(new Center(), null).forEach(new Consumer<Center>() {
 
 			@Override
@@ -109,7 +116,7 @@ public class JdbcDirectDemo {
 	@SuppressWarnings("unchecked")
 	static void requestCenterDetail(java.sql.Connection connection) throws Exception{
 		
-		CenterDetailDAO ctdao = new CenterDetailDAO(connection);
+		CenterDetailDAO ctdao = new CenterDetailDAO();
 		ctdao.findAll(new CenterDetail(), null).forEach(new Consumer<CenterDetail>() {
 
 			@Override
@@ -126,7 +133,7 @@ public class JdbcDirectDemo {
 	@SuppressWarnings("unchecked")
 	static void requestMark(java.sql.Connection connection) throws Exception{
 		
-		MarkDAO ctdao = new MarkDAO(connection);
+		MarkDAO ctdao = new MarkDAO();
 		ctdao.findAll(new Mark(), null).forEach(new Consumer<Mark>() {
 
 			@Override
@@ -143,7 +150,7 @@ public class JdbcDirectDemo {
 	@SuppressWarnings("unchecked")
 	static void requestDeliberation(java.sql.Connection connection) throws Exception{
 		
-		DeliberationDAO ctdao = new DeliberationDAO(connection);
+		DeliberationDAO ctdao = new DeliberationDAO();
 		ctdao.findAll(new Deliberation(), null).forEach(new Consumer<Deliberation>() {
 
 			@Override
