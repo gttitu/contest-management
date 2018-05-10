@@ -50,25 +50,26 @@ public class JdbcDirectDemo {
 		ContestDAO ctdao = new ContestDAO();
 		CacheData cache = new CacheData();
 		cache.initCache(Duration.ofSeconds(5), true);
-		
-		//ctdao.findAllByFullText(null, "magistrats* license* concours*").forEach(new Consumer<Contest>() {
-		System.out.println("1er findAll");
-		ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
+		//ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
+		String keywords =  "magistr*";
+		//String keywords =  "magistrats* license* concours*"
+		System.out.println("1er findAllByFullText");
+		ctdao.findAllByFullText(null, keywords).forEach(new Consumer<Contest>() {
 			@Override
 			public void accept(Contest t) {
 				System.out.println(t);
 			}
 		});
-		System.out.println("2e findAll");
-		ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
+		System.out.println("2e findAllByFullText");
+		ctdao.findAllByFullText(null, keywords).forEach(new Consumer<Contest>() {
 			@Override
 			public void accept(Contest t) {
 				System.out.println(t);
 			}
 		});
 		Thread.sleep(10000);
-		System.out.println("3e findAll après 10 secs");
-		ctdao.findAll(new Contest()).forEach(new Consumer<Contest>() {
+		System.out.println("3e findAllByFullText aprÃ¨s 10 secs");
+		ctdao.findAllByFullText(null, keywords).forEach(new Consumer<Contest>() {
 			@Override
 			public void accept(Contest t) {
 				System.out.println(t);
