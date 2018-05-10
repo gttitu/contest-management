@@ -83,7 +83,7 @@ public class CacheData {
 		return result;
 	}
 	
-	public void putAllInCache(List listModel, String cacheName) throws Exception{
+	public void putInCache(List listModel, String cacheName) throws Exception{
 		System.out.println("updating cache...");
 		Object[] modelContest = this.convertListToArray(listModel);
 		Cacheonix cacheManager = Cacheonix.getInstance();
@@ -94,7 +94,7 @@ public class CacheData {
         this.setLastUpdateDate();
 	}
 	
-	public List findAllFromCache(BaseModel model, String cacheName) throws Exception {
+	public List findFromCache(BaseModel model, String cacheName) throws Exception {
 		List result = new ArrayList<>();
 		Cacheonix cacheManager = Cacheonix.getInstance();
 		if(cacheManager.cacheExists(cacheName + ".cache")) {
@@ -109,26 +109,5 @@ public class CacheData {
 	
 		return result;
 	}
-	
-public static void main(String[] args) {
-		
-		try {
-		
-			CacheData cache = new CacheData();
-			cache.initCache(Duration.ofSeconds(5), true);
-			cache.setLastUpdateDate();
-			System.out.println(cache.getLastUpdateDate());
-			System.out.println("cache activé : "+cache.isEnabled());
-			System.out.println("cache expiré : "+cache.isExpired());
-			Thread.sleep(10000);
-			System.out.println("cache expiré après 10 secs : "+cache.isExpired());
-		} catch (Exception ex) {
-			
-			ex.printStackTrace();
-			
-		}
-		
-	}
-	
 	
 }
