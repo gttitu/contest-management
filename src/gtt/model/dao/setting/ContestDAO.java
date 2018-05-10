@@ -254,47 +254,45 @@ public class ContestDAO implements InterfaceDAO{
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List findAllByFullText(Class<?> modelClass, String keywords) throws Exception {
-		
 		List<BaseModel> result = new ArrayList<>();
-		
+		CacheData cache = new CacheData();
+		Cacheonix cacheManager = Cacheonix.getInstance();
 		if(keywords != null) {
-			
+			if(cache.isEnabled())
+				result = this.findAllByFullTextFromCache(new Contest(), keywords);
+			else
+				result = this.fullTextSearch(keywords);
+		} return result;
+	}
+	
+	public List findAllByFullTextNoCache(Class<?> modelClass, String keywords) throws Exception {
+		List<BaseModel> result = new ArrayList<>();
+		CacheData cache = new CacheData();
+		Cacheonix cacheManager = Cacheonix.getInstance();
+		if(keywords != null) {
 			result = this.fullTextSearch(keywords);
-			
 		} return result;
 		
 	}
 	
-	// METHODS FOR FULL TEXT - END
-	
-	public List findAllFromCache(BaseModel model) throws Exception {
+
+	public List findAllByFullTextFromCache(BaseModel model,  String keywords) throws Exception {
 		CacheData cache = new CacheData();
 		List result = new ArrayList<>();
-		String nameCache = "Contest-list";
 		Cacheonix cacheManager = Cacheonix.getInstance();
-		String key = "Contest-list";
 		if(this.isCorrect(model)) {
-			if(cacheManager.cacheExists(key + ".cache")) {
+			if(cacheManager.cacheExists(keywords + ".cache")) {
 				if(cache.isExpired()) {
-					cache.putAllInCache(this.findAll(model, null), nameCache);
+					cache.putInCache(this.findAllByFullTextNoCache(null, keywords), keywords);
 				}
-				result = cache.findAllFromCache(model, nameCache);
+				result = cache.findFromCache(model, keywords);
 			}else {
 				System.out.println("reading database");
-				result=this.findAll(model, null);
-				cache.putAllInCache(result, nameCache);
+				result=this.findAllByFullTextNoCache(null, keywords);
+				cache.putInCache(result, keywords);
 			}
 		}
 		return result;
 	}
 	
-	public List findAll(BaseModel model) throws Exception {
-		CacheData cache = new CacheData();
-		List result = new ArrayList<>();
-		Cacheonix cacheManager = Cacheonix.getInstance();
-		if(cache.isEnabled())
-			return this.findAllFromCache(model);
-		else
-			return	this.findAll(model);
-	}	
 }
