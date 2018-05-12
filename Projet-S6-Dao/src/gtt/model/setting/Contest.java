@@ -110,8 +110,18 @@ public class Contest extends BaseModel implements java.io.Serializable{
 	}
 
 	@Override
-	public void copy(BaseModel toCopy) {
-		// TODO Auto-generated method stub
+	public void copy(BaseModel toCopy) throws Exception {
+		
+		if(toCopy instanceof Contest) {
+			
+			Contest contest = (Contest) toCopy;
+			this.setId(contest.getId());
+			this.setDescription(contest.getDescription());
+			this.setFinished(contest.isFinished());
+			this.setDateBegin(contest.getDateBegin());
+			this.setDateEnd(contest.getDateEnd());
+			
+		} else throw new Exception("This model to copy is not instanciate with the correct class !");
 		
 	}
 	

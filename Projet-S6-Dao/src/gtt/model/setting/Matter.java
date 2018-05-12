@@ -133,8 +133,20 @@ public class Matter extends BaseModel{
 	}
 
 	@Override
-	public void copy(BaseModel toCopy) {
-		// TODO Auto-generated method stub
+	public void copy(BaseModel toCopy) throws Exception {
+		
+		if(toCopy instanceof Matter) {
+			
+			Matter matter = (Matter) toCopy;
+			this.setId(matter.getId());
+			this.setContest(matter.getContest());
+			this.setDescription(matter.getDescription());
+			this.setDatetimeBegin(matter.getDatetimeBegin());
+			this.setDatetimeEnd(matter.getDatetimeEnd());
+			this.setAverage(matter.getAverage());
+			this.setCoefficient(matter.getCoefficient());
+			
+		} else throw new Exception("This model to copy is not instanciate with the correct class !");
 		
 	}
 	
