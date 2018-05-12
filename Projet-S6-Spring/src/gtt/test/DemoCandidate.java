@@ -31,6 +31,9 @@ public class DemoCandidate {
 		
 		Candidate candidate = new Candidate(4);
 		CandidateDetail detail = new CandidateDetail(1, "Harry", "Potter", 13, 1);
+		//CandidateDetail detail = new CandidateDetail(1, "Hermione", "Granger", 12, 0);
+		//CandidateDetail detail = new CandidateDetail(1, "Ron", "Weasley", 12, 1);
+		//CandidateDetail detail = new CandidateDetail(1, "Jean", "Kevin", 14, 1);
 		
 		serv.addCandidate(candidate, detail);
 		
