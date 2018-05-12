@@ -76,8 +76,15 @@ public class Candidate extends BaseModel {
 	}
 
 	@Override
-	public void copy(BaseModel toCopy) {
-		// TODO Auto-generated method stub
+	public void copy(BaseModel toCopy) throws Exception {
+		
+		if(toCopy instanceof Candidate) {
+			
+			Candidate candidate = (Candidate)toCopy;
+			this.setId(candidate.getId());
+			this.setCenter(candidate.getCenter());
+			
+		} else throw new Exception("This model to copy is not instanciate with the correct class !");
 		
 	}
 	

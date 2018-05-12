@@ -130,11 +130,12 @@ public class Mark extends BaseModel{
 		if(toCopy instanceof Mark) {
 			
 			Mark cpy = (Mark)toCopy;
+			this.setId(cpy.getId());
 			this.setCandidate(cpy.getCandidate());
 			this.setMarkValue(cpy.getMarkValue());
 			this.setMatter(cpy.getMatter());
 			
-		} else throw new ModelException("The object to copy on this is not a Mark !");
+		} else throw new ModelException("This model to copy is not instanciate with the correct class !");
 		
 	}
 

@@ -32,7 +32,7 @@
 		<property name="factory" ref="factory"></property>
 	</bean>
 	
-	<bean id="markService" class="test.service.MarkService"></bean>
+	<bean id="candServ" class="gtt.service.CandidateService"></bean>
 	
 	<context:annotation-config/>
 </beans>

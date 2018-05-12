@@ -3,6 +3,7 @@
 INSERT INTO Contest(description, finished, dateBegin, dateEnd) VALUES
 	('Concours des magistrats', false, '2018-05-02', '2018-05-06'),
 	('Examen en license informatique', false, '2018-05-08', '2018-05-10');
+INSERT INTO Contest(id, description, finished, dateBegin, dateEnd) VALUES(3, 'Examen d\'entree a Poudlard', false, '2018-05-16', '2018-05-18');
 	
 INSERT INTO Matter (contest, description, coefficient, average,  datetimeBegin , datetimeEnd) VALUES
 	(1, 'Droits', 3, 25, '2018-05-02 08:00', '2018-05-02 11:30'),
@@ -14,11 +15,13 @@ INSERT INTO Center (contest, description, location , nbAllowable) VALUES
 	(1, 'CCI', 'Ivato Antananarivo', 250),
 	(1, 'Carlton', 'Anosy Antananarivo', 190),
 	(2, 'EPP', 'Andoharanofotsy Antananarivo', 100);
+INSERT INTO Center (id, contest, description, location , nbAllowable) VALUES(4, 3, 'Stade couvert', 'Antananarivo/Mahamasina', 3);
 	
 INSERT INTO CenterDetail  (center, nbMen, nbWomen , minAge, maxAge ) VALUES
 	(1, 125, 125, 18, 50),
 	(2, 100, 90, 18, 50),
 	(3, 80, 20, 16, 60);
+INSERT INTO CenterDetail(id, center, nbMen, nbWomen , minAge, maxAge) VALUES(4, 4, 2, 1, 12, 15);
 	
 
 -- Gimmy

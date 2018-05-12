@@ -129,8 +129,19 @@ public class CenterDetail  extends BaseModel {
 	}
 
 	@Override
-	public void copy(BaseModel toCopy) {
-		// TODO Auto-generated method stub
+	public void copy(BaseModel toCopy) throws Exception {
+		
+		if(toCopy instanceof CenterDetail) {
+			
+			CenterDetail detail = (CenterDetail)toCopy;
+			this.setId(detail.getId());
+			this.setCenter(detail.getCenter());
+			this.setNbMen(detail.getNbMen());
+			this.setNbWomen(detail.getNbWomen());
+			this.setMinAge(detail.getMinAge());
+			this.setMaxAge(detail.getMaxAge());
+			
+		} else throw new Exception("This model to copy is not instanciate with the correct class !");
 		
 	}
 	

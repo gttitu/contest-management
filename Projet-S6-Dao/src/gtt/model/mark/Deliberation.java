@@ -111,11 +111,12 @@ public class Deliberation extends BaseModel{
 		if(toCopy instanceof Deliberation) {
 			
 			Deliberation cpy = (Deliberation)toCopy;
+			this.setId(cpy.getId());
 			this.setCenter(cpy.getCenter());
 			this.setMarkValue(cpy.getMarkValue());
 			this.setMatter(cpy.getMatter());
 			
-		} else throw new ModelException("The object to copy on this is not a Deliberation !");
+		} else throw new ModelException("This model to copy is not instanciate with the correct class !");
 		
 	}
 

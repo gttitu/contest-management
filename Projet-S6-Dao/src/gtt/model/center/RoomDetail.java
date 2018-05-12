@@ -93,8 +93,16 @@ public class RoomDetail extends BaseModel{
 	}
 
 	@Override
-	public void copy(BaseModel toCopy) {
-		// TODO Auto-generated method stub
+	public void copy(BaseModel toCopy) throws Exception {
+		
+		if(toCopy instanceof RoomDetail) {
+			
+			RoomDetail detail = (RoomDetail) toCopy;
+			this.setId(detail.getId());
+			this.setRoom(detail.getRoom());
+			this.setCandidate(detail.getCandidate());
+			
+		} else throw new Exception("This model to copy is not instanciate with the correct class !");
 		
 	}
 	

@@ -44,6 +44,7 @@ CREATE TABLE CenterDetail (
 	FOREIGN KEY(center) REFERENCES Center(id)
 )Engine=InnoDB;
 
+
 -- Gimmy
 
 CREATE TABLE Candidate(
