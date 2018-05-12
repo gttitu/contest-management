@@ -8,14 +8,14 @@
    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
    
  	
- 	<bean id = "dataSource"  class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 	<bean id = "dataSource"  class = "org.springframework.jdbc.datasource.DriverManagerDataSource" scope="singleton">
 	   <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
 	   <property name = "url" value = "jdbc:mysql://localhost:3306/contest-management"/>
 	   <property name = "username" value = "root"/>
 	   <property name = "password" value = "root"/>
 	</bean>
 	
-	<bean id="factory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	<bean id="factory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" scope="singleton">
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="packagesToScan" value="gtt.model" />
 	    <property name="hibernateProperties">
@@ -28,11 +28,11 @@
 	    </property>
 	</bean>
 	
-	<bean id="dataAccess" class="gtt.dao.mybernate.Mybernate">
+	<bean id="dataAccess" class="gtt.dao.mybernate.Mybernate" scope="singleton">
 		<property name="factory" ref="factory"></property>
 	</bean>
 	
-	<bean id="candServ" class="gtt.service.CandidateService"></bean>
+	<bean id="candServ" class="gtt.service.CandidateService" scope="singleton"></bean>
 	
 	<context:annotation-config/>
 </beans>

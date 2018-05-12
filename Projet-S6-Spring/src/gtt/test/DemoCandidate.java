@@ -3,12 +3,11 @@ package gtt.test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import gtt.model.ModelException;
 import gtt.model.candidate.Candidate;
 import gtt.model.candidate.CandidateDetail;
 import gtt.service.CandidateService;
 
-public class Demo {
+public class DemoCandidate {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
