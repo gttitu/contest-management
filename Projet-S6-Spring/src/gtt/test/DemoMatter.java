@@ -31,8 +31,8 @@ public class DemoMatter {
 	
 	static void addMatter(MatterService serv) throws Exception {
 		
-		Matter matter = new Matter(1, "Économie", 5, (float)50, "2018-05-03 08:00", "2018-05-03 11:30");
-		
+		Matter matter = new Matter(1, "Maths", 5, (float)50, "2018-05-08 08:00", "2018-05-08 11:30");
+		//Matter matter = new Matter(1, "Maths", 5, (float)50, "2018-05-08 11:00", "2018-05-08 08:00");
 		serv.addMatter(matter);
 		
 	}

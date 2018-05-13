@@ -2,6 +2,8 @@ package gtt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import gtt.dao.mybernate.Mybernate;
 import gtt.model.setting.*;
@@ -22,15 +24,33 @@ public class MatterService {
 		
 		if(this.existsContest(matter.getContest())) {
 			
-			if(this.checkDates(matter, matter.getContest())){
+			if(!this.existsMatterDescription(matter, matter.getContest())) {
+			
+				if(this.isBeginBeforeEnd(matter)){
 				
-				dataAccess.save(matter);
-				
-			} else throw new ServiceException("The dates of matter are out of the dates of contest !");
+					if(this.checkDates(matter, matter.getContest())){
+						
+						dataAccess.save(matter);
+						
+					} else throw new ServiceException("The dates of matter are out of the dates of contest !");
+					
+				} else throw new ServiceException("The start datetime of the matter is not before the end datetime !");
+			
+			} else throw new ServiceException("The description of the matter already exists for this Contest !");
 		
 		} else throw new ServiceException("The specified contest doesn't exist !");
 		
 	}
+	
+	private boolean isBeginBeforeEnd(Matter matter) {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime dateTimeBegin = LocalDateTime.parse(matter.getDatetimeBegin(), formatter);
+		LocalDateTime dateTimeEnd = LocalDateTime.parse(matter.getDatetimeEnd(), formatter);
+		return dateTimeBegin.isBefore(dateTimeEnd) ;
+		
+	}
+	
 	
 	private boolean existsContest(Integer id) throws Exception {
 		
@@ -45,12 +65,24 @@ public class MatterService {
 		
 	}
 	
+	private boolean existsMatterDescription(Matter matter, Integer contest) throws Exception {
+		
+		boolean result = false;
+		
+		int nb = dataAccess.findAll(new Matter(), "FROM Contest c, Matter m WHERE c.id=m.contest and m.description='" + matter.getDescription() + "'").size();
+		if(nb>=1)
+			result = true;
+		
+		return result;
+		
+	}
+	
 	private boolean checkDates(Matter matter, Integer contest) throws Exception {
 		
 		boolean result = false;
 		
 		int nb = dataAccess.findAll(new Contest(), "FROM Contest c, Matter m WHERE c.id=m.contest AND c.dateBegin <= '" + matter.getDatetimeBegin() + "' AND c.dateEnd >= '" + matter.getDatetimeEnd() + "'").size();
-		if(nb==1)
+		if(nb>=1)
 			result = true;
 		
 		return result;
