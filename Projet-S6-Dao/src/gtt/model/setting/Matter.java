@@ -1,14 +1,20 @@
 package gtt.model.setting;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+import gtt.annotation.DbTable;
 import gtt.annotation.TableAttr;
 import gtt.model.BaseModel;
 import gtt.model.ModelException;
 
+@Entity
+@Table(name = "Matter")
+@DbTable(name = "Matter")
 public class Matter extends BaseModel{
 	
 	// ATTRIBUTES :
