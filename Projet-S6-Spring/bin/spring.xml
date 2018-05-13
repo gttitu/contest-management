@@ -33,6 +33,7 @@
 	</bean>
 	
 	<bean id="candServ" class="gtt.service.CandidateService" scope="singleton"></bean>
+	<bean id="mattServ" class="gtt.service.MatterService" scope="singleton"></bean>
 	
 	<context:annotation-config/>
 </beans>
