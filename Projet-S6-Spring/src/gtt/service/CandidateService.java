@@ -51,7 +51,7 @@ public class CandidateService {
 	
 	private void doAdd(Session session, Candidate candidate, CandidateDetail detail) throws Exception {
 		
-		if(this.existsCenter(candidate.getCenter())) {
+		if(this.existsCenter(session, candidate.getCenter())) {
 			
 			if(this.checkNbByGender(candidate.getCenter(), detail.getGender())) {
 				
@@ -88,12 +88,12 @@ public class CandidateService {
 		
 	}
 	
-	private boolean existsCenter(Integer id) throws Exception {
+	private boolean existsCenter(Session session, Integer id) throws Exception {
 		
 		boolean result = true;
 		
 		Center center = new Center(); center.setId(id);
-		dataAccess.findById(center);
+		dataAccess.findById(center, session);
 		if(center.getDescription() == null || center.getDescription() == null || center.getContest() == null || center.getLocation() == null)
 			result = false;
 		
