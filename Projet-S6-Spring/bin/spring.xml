@@ -7,6 +7,9 @@
    http://www.springframework.org/schema/context
    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
    
+   <context:annotation-config/>
+	<context:component-scan base-package="gtt"></context:component-scan>
+   
  	
  	<bean id = "dataSource"  class = "org.springframework.jdbc.datasource.DriverManagerDataSource" scope="singleton">
 	   <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
@@ -28,12 +31,4 @@
 	    </property>
 	</bean>
 	
-	<bean id="dataAccess" class="gtt.dao.mybernate.Mybernate" scope="singleton">
-		<property name="factory" ref="factory"></property>
-	</bean>
-	
-	<bean id="candServ" class="gtt.service.CandidateService" scope="singleton"></bean>
-	<bean id="mattServ" class="gtt.service.MatterService" scope="singleton"></bean>
-	
-	<context:annotation-config/>
 </beans>

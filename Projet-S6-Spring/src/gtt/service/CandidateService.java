@@ -2,28 +2,54 @@ package gtt.service;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import gtt.dao.mybernate.Mybernate;
+import gtt.model.dao.mybernate.Mybernate;
 import gtt.model.candidate.Candidate;
 import gtt.model.candidate.CandidateDetail;
 import gtt.model.center.Center;
 import gtt.model.center.CenterDetail;
 
-@Component
+@Component("candServ")
 public class CandidateService {
 	
+	@Autowired
 	private Mybernate dataAccess;
 	
-	@Autowired
-	private void init(Mybernate dataAccess) {
+	@SuppressWarnings("unchecked")
+	public List<CandidateDetail> getCandidates() throws Exception{
 		
-		this.dataAccess = dataAccess;
+		return dataAccess.findAll(new CandidateDetail(), null);
 		
 	}
 	
 	public void addCandidate(Candidate candidate, CandidateDetail detail) throws Exception {
+		
+		dataAccess.setAutoTransaction(false);
+		
+		Session session = dataAccess.createSession();
+		
+		try {
+		
+			session.beginTransaction();
+			this.doAdd(session, candidate, detail);
+			session.getTransaction().commit();
+		
+		} catch(Exception ex) {
+			
+			throw ex;
+			
+		} finally {
+			
+			session.close();
+			
+		}
+		
+	}
+	
+	private void doAdd(Session session, Candidate candidate, CandidateDetail detail) throws Exception {
 		
 		if(this.existsCenter(candidate.getCenter())) {
 			
@@ -31,11 +57,11 @@ public class CandidateService {
 				
 				if(this.checkAge(candidate.getCenter(), detail.getAge())) {
 					
-					dataAccess.save(candidate);
+					dataAccess.save(candidate, session);
 					
 					detail.setCandidate(candidate.getId());
 					
-					dataAccess.save(detail);
+					dataAccess.save(detail, session);
 					
 				} else throw new ServiceException("The candidate doesn't have the correct age for this contest !");
 				

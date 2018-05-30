@@ -4,18 +4,19 @@ import java.util.function.Consumer;
 
 import gtt.model.center.Center;
 import gtt.model.center.CenterDetail;
-import gtt.dao.center.CenterDAO;
-import gtt.dao.center.CenterDetailDAO;
-import gtt.dao.mark.DeliberationDAO;
-import gtt.dao.mark.MarkDAO;
-import gtt.dao.setting.ContestDAO;
-import gtt.dao.setting.MatterDAO;
+import gtt.model.dao.*;
+import gtt.model.dao.center.CenterDAO;
+import gtt.model.dao.center.CenterDetailDAO;
+import gtt.model.dao.mark.DeliberationDAO;
+import gtt.model.dao.mark.MarkDAO;
+import gtt.model.dao.setting.ContestDAO;
+import gtt.model.dao.setting.MatterDAO;
 import gtt.model.mark.Deliberation;
 import gtt.model.mark.Mark;
 import gtt.model.setting.Contest;
 import gtt.model.setting.Matter;
 import gtt.cache.*;
-import gtt.dao.*;
+
 import java.time.*;
 
 public class JdbcDirectDemo {

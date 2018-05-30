@@ -1,6 +1,6 @@
 package gtt.test.mybernate;
 
-import gtt.dao.mybernate.Mybernate;
+import gtt.model.dao.mybernate.Mybernate;
 import gtt.model.mark.Mark;
 
 public class DemoSave {
