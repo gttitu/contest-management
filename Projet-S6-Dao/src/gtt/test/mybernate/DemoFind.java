@@ -2,7 +2,7 @@ package gtt.test.mybernate;
 
 import java.util.function.Consumer;
 
-import gtt.dao.mybernate.Mybernate;
+import gtt.model.dao.mybernate.Mybernate;
 import gtt.model.mark.Mark;
 
 public class DemoFind {

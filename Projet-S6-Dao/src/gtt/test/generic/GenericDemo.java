@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import gtt.dao.ConnUtils;
-import gtt.dao.generic.GenericDAO;
 import gtt.model.BaseModel;
 import gtt.model.candidate.Candidate;
 import gtt.model.setting.Contest;
 import gtt.model.candidate.CandidateDetail;
 import gtt.model.center.Room;
 import gtt.model.center.RoomDetail;
+import gtt.model.dao.ConnUtils;
+import gtt.model.dao.generic.GenericDAO;
 
 @SuppressWarnings("unused")
 public class GenericDemo {

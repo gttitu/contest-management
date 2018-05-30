@@ -3,11 +3,8 @@ package gtt.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import gtt.dao.mybernate.Mybernate;
+import gtt.model.dao.mybernate.Mybernate;
 import gtt.model.candidate.Candidate;
-import gtt.model.candidate.CandidateDetail;
-import gtt.model.center.Center;
-import gtt.model.center.CenterDetail;
 import gtt.model.setting.Contest;
 import gtt.model.mark.Mark;
 import gtt.model.setting.Matter;
