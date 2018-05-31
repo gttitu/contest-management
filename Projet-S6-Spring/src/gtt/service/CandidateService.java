@@ -12,7 +12,7 @@ import gtt.model.candidate.CandidateDetail;
 import gtt.model.center.Center;
 import gtt.model.center.CenterDetail;
 
-@Component("candServ")
+@Component
 public class CandidateService {
 	
 	@Autowired
@@ -53,9 +53,9 @@ public class CandidateService {
 		
 		if(this.existsCenter(session, candidate.getCenter())) {
 			
-			if(this.checkNbByGender(candidate.getCenter(), detail.getGender())) {
+			if(this.checkNbByGender(session, candidate.getCenter(), detail.getGender())) {
 				
-				if(this.checkAge(candidate.getCenter(), detail.getAge())) {
+				if(this.checkAge(session, candidate.getCenter(), detail.getAge())) {
 					
 					dataAccess.save(candidate, session);
 					
@@ -72,12 +72,12 @@ public class CandidateService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private boolean checkAge(Integer center, Integer age) throws Exception {
+	private boolean checkAge(Session session, Integer center, Integer age) throws Exception {
 		
 		boolean result = false;
 		
 		CenterDetail search = new CenterDetail(); search.setCenter(center);
-		List<CenterDetail> details = dataAccess.findAll(search, null);
+		List<CenterDetail> details = dataAccess.findAll(search, null, session);
 		if(details.size() == 1) {
 			
 			CenterDetail detail = details.get(0);
@@ -102,25 +102,25 @@ public class CandidateService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private boolean checkNbByGender(Integer center, Integer gender) throws Exception {
+	private boolean checkNbByGender(Session session, Integer center, Integer gender) throws Exception {
 		
 		boolean result = false;
 		
 		CenterDetail search = new CenterDetail(); search.setCenter(center);
-		List<CenterDetail> details = dataAccess.findAll(search, null);
+		List<CenterDetail> details = dataAccess.findAll(search, null, session);
 		if(details.size() == 1) {
 			
-			result = this.doCheckNbByGender(details.get(0), center, gender);
+			result = this.doCheckNbByGender(session, details.get(0), center, gender);
 			
 		} return result;
 		
 	}
 	
-	private boolean doCheckNbByGender(CenterDetail detail, Integer center, Integer gender) throws Exception {
+	private boolean doCheckNbByGender(Session session, CenterDetail detail, Integer center, Integer gender) throws Exception {
 		
 		boolean result = false;
 		
-		int nb = dataAccess.findAll(new CandidateDetail(), "FROM Candidate c, CandidateDetail cd WHERE c.id=cd.candidate AND c.center = " + center + " AND cd.gender = " + gender).size();
+		int nb = dataAccess.findAll(new CandidateDetail(), "FROM Candidate c, CandidateDetail cd WHERE c.id=cd.candidate AND c.center = " + center + " AND cd.gender = " + gender, session).size();
 		if((gender == 1 && detail.getNbMen() >= (nb + 1)) || (gender == 0 && detail.getNbWomen() >= (nb + 1)))
 			result = true;
 		
