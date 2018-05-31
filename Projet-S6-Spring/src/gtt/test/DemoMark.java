@@ -13,8 +13,9 @@ import gtt.model.candidate.*;
 
 public class DemoMark {
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
 		MarkService markServ = ctx.getBean(MarkService.class);
 		

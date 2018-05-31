@@ -43,11 +43,11 @@ public class MatterService {
 		
 		if(this.existsContest(session, matter.getContest())) {
 			
-			if(!this.existsMatterDescription(matter, matter.getContest())) {
+			if(!this.existsMatterDescription(session, matter, matter.getContest())) {
 				
 				if(this.isBeginBeforeEnd(matter)){
 			
-					if(this.checkDates(matter, matter.getContest())){
+					if(this.checkDates(session, matter, matter.getContest())){
 						
 						dataAccess.save(matter, session);
 						
@@ -74,11 +74,11 @@ public class MatterService {
 		
 	}
 	
-	private boolean checkDates(Matter matter, Integer contest) throws Exception {
+	private boolean checkDates(Session session, Matter matter, Integer contest) throws Exception {
 		
 		boolean result = false;
 		
-		int nb = dataAccess.findAll(new Contest(), "FROM Contest c WHERE c.id=" + matter.getContest() + " AND c.dateBegin <= '" + matter.getDatetimeBegin() + "' AND c.dateEnd >= '" + matter.getDatetimeEnd() + "'").size();
+		int nb = dataAccess.findAll(new Contest(), "FROM Contest c WHERE c.id=" + matter.getContest() + " AND c.dateBegin <= '" + matter.getDatetimeBegin() + "' AND c.dateEnd >= '" + matter.getDatetimeEnd() + "'", session).size();
 		if(nb == 1)
 			result = true;
 		
@@ -95,11 +95,11 @@ public class MatterService {
 		
 	}
 	
-	private boolean existsMatterDescription(Matter matter, Integer contest) throws Exception {
+	private boolean existsMatterDescription(Session session, Matter matter, Integer contest) throws Exception {
 		
 		boolean result = false;
 		
-		int nb = dataAccess.findAll(new Matter(), "FROM Contest c, Matter m WHERE c.id=m.contest and m.description='" + matter.getDescription() + "'").size();
+		int nb = dataAccess.findAll(new Matter(), "FROM Contest c, Matter m WHERE c.id=m.contest and m.description='" + matter.getDescription() + "'", session).size();
 		if(nb>=1)
 			result = true;
 		
