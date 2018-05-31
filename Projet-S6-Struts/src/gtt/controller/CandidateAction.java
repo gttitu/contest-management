@@ -31,11 +31,11 @@ public class CandidateAction extends ActionSupport {
 	private Candidate candidate;
 	private CandidateDetail detail;
 	
+	private String errorMessage = "Aucune erreur";
+	
 	// METHODS :
 	
 	public String findCandidates() throws Exception {
-		
-		String result = "error";
 		
 		try {
 		
@@ -43,20 +43,17 @@ public class CandidateAction extends ActionSupport {
 			
 			centers = centServ.getCenters();
 			candidates = candServ.getCandidates();
-			
-			result = "success";
 		
 		} catch (Exception ex) {
 			
+			errorMessage = ex.getMessage();
 			throw ex;
 			
-		} return result;
+		} return "success";
 		
 	}
 	
 	public String insertCandidate() throws Exception{
-		
-		String result = "error";
 		
 		try {
 		
@@ -65,14 +62,13 @@ public class CandidateAction extends ActionSupport {
 			candServ.addCandidate(candidate, detail);
 			centers = centServ.getCenters();
 			candidates = candServ.getCandidates();
-			
-			result = "success";
 		
 		} catch (Exception ex) {
 			
+			errorMessage = ex.getMessage();
 			throw ex;
 			
-		} return result;
+		} return "success";
 		
 	}
 	
@@ -119,5 +115,11 @@ public class CandidateAction extends ActionSupport {
 	public List<Center> getCenters() {
 		return centers;
 	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	
 
 }
