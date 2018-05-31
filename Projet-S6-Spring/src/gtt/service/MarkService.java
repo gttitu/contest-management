@@ -40,13 +40,14 @@ public class MarkService {
 			if(totalMark < NumberTotalMarkContest(session, contest)) {
 				if(candidateHadnotMark(candidate, matter)) {
 					dataAccess.save(mark, session);
-				}else throw new ServiceException("The candidate already had mark for this matter!!");
+				}
+				else { throw new ServiceException("The candidate already had mark for this matter!!");}
 			}else throw new ServiceException("There are too many marks!!");
 		}
 		else {
 			if(candidateHadnotMark(candidate, matter)) {
 				dataAccess.save(mark, session);
-			}else throw new ServiceException("The candidate already had mark for this matter!!");
+			}else { throw new ServiceException("The candidate already had mark for this matter!!");}
 		}
 	}
 	
@@ -57,7 +58,7 @@ public class MarkService {
 	}
 	private int countCandidateContest(Session session, Contest contest)throws Exception{
 		int result = 0;
-		result = dataAccess.findAll(new Candidate(),"FROM Candidate c, Center ct where c.idCenter = ct.id AND ct.contest = "+contest.getId(), session).size();
+		result = dataAccess.findAll(new Candidate(),"FROM Candidate c, Center ct where c.center = ct.id AND ct.contest = "+contest.getId(), session).size();
 		return result;
 	}
 	private int countMatterContest(Session session, Contest contest)throws Exception{
@@ -77,8 +78,9 @@ public class MarkService {
 	private boolean candidateHadnotMark(Candidate candidate, Matter matter)throws Exception {
 		boolean result = false;
 		int verifMark = dataAccess.findAll(new Mark(), "FROM Mark m where candidate = "+candidate.getId() +"and matter = "+matter.getId()).size();
-		if(verifMark==0)
+		if(verifMark==0) {
 			result = true;
+		}
 		return result;
 	}
 }
