@@ -99,7 +99,7 @@ public class MatterService {
 		
 		boolean result = false;
 		
-		int nb = dataAccess.findAll(new Matter(), "FROM Contest c, Matter m WHERE c.id=m.contest and m.description='" + matter.getDescription() + "'", session).size();
+		int nb = dataAccess.findAll(new Matter(), "FROM Contest c, Matter m WHERE c.id=m.contest and m.contest=" + contest + " and m.description='" + matter.getDescription() + "'", session).size();
 		if(nb>=1)
 			result = true;
 		
