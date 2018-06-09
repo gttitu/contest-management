@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Contest-Management - Home</title>
+		<title>Contest Management</title>
 	</head>
 	<body>
 		<a href="getCandidates">Manage candidate</a>

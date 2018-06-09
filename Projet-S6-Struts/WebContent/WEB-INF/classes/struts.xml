@@ -8,18 +8,13 @@
 	<package name="default" strict-method-invocation="false" namespace="/" extends="struts-default">
 		<default-action-ref name="index"></default-action-ref>
 		<action name="index">
-			<exception-mapping result="error" exception="java.lang.Exception"></exception-mapping>
 			<result name="success">/views/index.jsp</result>
-			<result name="error">/views/error.jsp</result>
 		</action>
-		<action name="getCandidates" class="gtt.controller.CandidateAction" method="findCandidates">
-			<!-- <exception-mapping result="error" exception="java.lang.Exception"></exception-mapping> -->
-			<result name="success">/views/candidate.jsp</result>
-			<result name="error">/views/error.jsp</result>
+		<action name="saveCandidate" class="gtt.controller.CandidateAction" method="defaultMtd">
+			<result name="success">/views/candidate-save.jsp</result>
 		</action>
-		<action name="saveCandidate" class="gtt.controller.CandidateAction" method="insertCandidate">
-			<exception-mapping result="error" exception="java.lang.Exception"></exception-mapping>
-			<result name="success">/views/candidate.jsp</result>
+		<action name="insertCandidate" class="gtt.controller.CandidateAction" method="insertCandidate">
+			<result name="success">/views/candidate-save.jsp</result>
 			<result name="error">/views/error.jsp</result>
 		</action>
 	</package>

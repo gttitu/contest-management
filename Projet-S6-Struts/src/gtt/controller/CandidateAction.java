@@ -25,6 +25,20 @@ public class CandidateAction{
 	
 	// METHODS :
 	
+	public String defaultMtd() throws Exception { 
+		
+		try {
+			
+			centers = centerService.getCenters();
+			
+		} catch (Exception ex) {
+			
+			throw ex;
+			
+		} return "success"; 
+		
+	}
+	
 	public String findCandidates() throws Exception {
 		
 		try {
