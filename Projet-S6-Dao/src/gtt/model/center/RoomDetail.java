@@ -2,9 +2,6 @@ package gtt.model.center;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import gtt.annotation.DbTable;
@@ -18,11 +15,6 @@ import gtt.model.ModelException;
 public class RoomDetail extends BaseModel{
 	
 	// ATTRIBUTES :
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
 	
 	@Column(name = "idRoom")
 	@TableAttr(name = "idRoom")
@@ -53,16 +45,6 @@ public class RoomDetail extends BaseModel{
 	
 	// GETTERS AND SETTERS :
 	
-	@Override public Integer getId() { return this.id; }
-
-	@Override 
-	public void setId(Integer id) throws ModelException {
-		if(id > 0)
-			this.id = id;
-		else
-			throw new ModelException("Invalid value on ID : " + id + " !");
-	}
-	
 	public Integer getRoom() {
 		return room;
 	}
@@ -90,20 +72,6 @@ public class RoomDetail extends BaseModel{
 	@Override
 	public String toString() {
 		return "RoomDetail [room=" + room + ", candidate=" + candidate + ", id=" + id + "]";
-	}
-
-	@Override
-	public void copy(BaseModel toCopy) throws Exception {
-		
-		if(toCopy instanceof RoomDetail) {
-			
-			RoomDetail detail = (RoomDetail) toCopy;
-			this.setId(detail.getId());
-			this.setRoom(detail.getRoom());
-			this.setCandidate(detail.getCandidate());
-			
-		} else throw new Exception("This model to copy is not instanciate with the correct class !");
-		
 	}
 	
 	// STATIC METHODS :

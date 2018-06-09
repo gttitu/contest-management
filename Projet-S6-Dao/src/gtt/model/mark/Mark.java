@@ -2,9 +2,6 @@ package gtt.model.mark;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import gtt.annotation.DbTable;
@@ -18,11 +15,6 @@ import gtt.model.ModelException;
 public class Mark extends BaseModel{
 	
 	// ATTRIBUTES :
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
 	
 	@Column(name = "candidate")
 	@TableAttr(name = "candidate")
@@ -58,19 +50,6 @@ public class Mark extends BaseModel{
 	}
 	
 	// GETTERS AND SETTERS :
-	
-	@Override
-	public Integer getId() { return id; }
-
-	@Override
-	public void setId(Integer id) throws ModelException {
-		
-		if(id > 0)
-			this.id = id;
-		else
-			throw new ModelException("Invalid value on ID : " + id + " !");
-		
-	}
 	
 	public Integer getCandidate() {
 		
@@ -122,21 +101,6 @@ public class Mark extends BaseModel{
 	@Override
 	public String toString() {
 		return "Mark [id=" + id + ", candidate=" + candidate + ", matter=" + matter + ", markValue=" + markValue + "]";
-	}
-
-	@Override
-	public void copy(BaseModel toCopy) throws ModelException {
-		
-		if(toCopy instanceof Mark) {
-			
-			Mark cpy = (Mark)toCopy;
-			this.setId(cpy.getId());
-			this.setCandidate(cpy.getCandidate());
-			this.setMarkValue(cpy.getMarkValue());
-			this.setMatter(cpy.getMatter());
-			
-		} else throw new ModelException("This model to copy is not instanciate with the correct class !");
-		
 	}
 
 }

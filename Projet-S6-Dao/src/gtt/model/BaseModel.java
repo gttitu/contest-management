@@ -1,9 +1,17 @@
 package gtt.model;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class BaseModel {
 	
 	// ATTRIBUTES :
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 	
 	// METHODS :
@@ -16,9 +24,5 @@ public abstract class BaseModel {
 		else
 			throw new ModelException("Invalid value on ID : " + id + " !");
 	}
-	
-	// METHODS TO DEFINE :
-	
-	public abstract void copy(BaseModel toCopy) throws Exception;
 
 }

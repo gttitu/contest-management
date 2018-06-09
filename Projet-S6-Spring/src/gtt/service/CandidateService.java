@@ -51,23 +51,40 @@ public class CandidateService {
 	
 	private void doAdd(Session session, Candidate candidate, CandidateDetail detail) throws Exception {
 		
-		if(this.existsCenter(session, candidate.getCenter())) {
-			
-			if(this.checkNbByGender(session, candidate.getCenter(), detail.getGender())) {
+		if(!this.somethingIsNull(candidate, detail)) {
+		
+			if(this.existsCenter(session, candidate.getCenter())) {
 				
-				if(this.checkAge(session, candidate.getCenter(), detail.getAge())) {
+				if(this.checkNbByGender(session, candidate.getCenter(), detail.getGender())) {
 					
-					dataAccess.save(candidate, session);
+					if(this.checkAge(session, candidate.getCenter(), detail.getAge())) {
+						
+						dataAccess.save(candidate, session);
+						
+						detail.setCandidate(candidate.getId());
+						
+						dataAccess.save(detail, session);
+						
+					} else throw new ServiceException("The candidate doesn't have the correct age for this contest !");
 					
-					detail.setCandidate(candidate.getId());
-					
-					dataAccess.save(detail, session);
-					
-				} else throw new ServiceException("The candidate doesn't have the correct age for this contest !");
+				} else throw new ServiceException("The number of candidate with this gender is already complete !");
 				
-			} else throw new ServiceException("The number of candidate with this gender is already complete !");
+			} else throw new ServiceException("The specified center doesn't exist !");
+		
+		} else throw new ServiceException("There is something null !");
+		
+	}
+	
+	private boolean somethingIsNull(Candidate candidate, CandidateDetail detail) {
+		
+		boolean result = false;
+		
+		if(candidate.getCenter() == null || detail.getFirstname() == null || detail.getLastname() == null ||
+				detail.getAge() == null || detail.getGender() == null) {
 			
-		} else throw new ServiceException("The specified center doesn't exist !");
+			result = true;
+			
+		} return result;
 		
 	}
 	

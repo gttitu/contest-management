@@ -2,9 +2,6 @@ package gtt.model.center;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import gtt.annotation.DbTable;
@@ -18,11 +15,6 @@ import gtt.model.ModelException;
 public class CenterDetail  extends BaseModel {
 	
 	// ATTRIBUTES :
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
 	
 	@Column(name = "center")
 	@TableAttr(name = "center")
@@ -65,16 +57,6 @@ public class CenterDetail  extends BaseModel {
 	}
 	
 	// GETTERS AND SETTERS :
-	
-	@Override public Integer getId() { return this.id; }
-
-	@Override 
-	public void setId(Integer id) throws ModelException {
-		if(id > 0)
-			this.id = id;
-		else
-			throw new ModelException("Invalid value on ID : " + id + " !");
-	}
 	
 	public Integer getCenter() {
 		return center;
@@ -127,24 +109,5 @@ public class CenterDetail  extends BaseModel {
 		return "CenterDetail [center=" + center + ", nbMen=" + nbMen + ", nbWomen=" + nbWomen + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", id=" + id + "]";
 	}
-
-	@Override
-	public void copy(BaseModel toCopy) throws Exception {
-		
-		if(toCopy instanceof CenterDetail) {
-			
-			CenterDetail detail = (CenterDetail)toCopy;
-			this.setId(detail.getId());
-			this.setCenter(detail.getCenter());
-			this.setNbMen(detail.getNbMen());
-			this.setNbWomen(detail.getNbWomen());
-			this.setMinAge(detail.getMinAge());
-			this.setMaxAge(detail.getMaxAge());
-			
-		} else throw new Exception("This model to copy is not instanciate with the correct class !");
-		
-	}
-	
-	
 	
 }
