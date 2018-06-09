@@ -2,9 +2,6 @@ package gtt.model.center;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import gtt.annotation.DbTable;
@@ -18,11 +15,6 @@ import gtt.model.ModelException;
 public class Room extends BaseModel {
 	
 	// ATTRIBUTES :
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
 		
 	@Column(name = "idCenter")
 	@TableAttr(name = "idCenter")
@@ -47,16 +39,6 @@ public class Room extends BaseModel {
 	
 	// GETTERS AND SETTERS :
 	
-	@Override public Integer getId() { return this.id; }
-
-	@Override 
-	public void setId(Integer id) throws ModelException {
-		if(id > 0)
-			this.id = id;
-		else
-			throw new ModelException("Invalid value on ID : " + id + " !");
-	}
-	
 	public Integer getCenter() {
 		return center;
 	}
@@ -73,19 +55,6 @@ public class Room extends BaseModel {
 	@Override
 	public String toString() {
 		return "Room [center=" + center + ", id=" + id + "]";
-	}
-
-	@Override
-	public void copy(BaseModel toCopy) throws Exception {
-		
-		if(toCopy instanceof Room) {
-			
-			Room room = (Room) toCopy;
-			this.setId(room.getId());
-			this.setCenter(room.getCenter());
-			
-		} else throw new Exception("This model to copy is not instanciate with the correct class !");
-		
 	}
 	
 	// STATIC METHODS :

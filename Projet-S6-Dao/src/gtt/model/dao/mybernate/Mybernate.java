@@ -197,8 +197,7 @@ public class Mybernate implements InterfaceDAO {
 	protected void doFindById(Session session, BaseModel model) throws Exception {
 		
 		if(autoTransaction) transaction = session.beginTransaction();
-		BaseModel toCopy = session.get(model.getClass(), model.getId());
-		model.copy(toCopy);
+		session.load(model, model.getId());
 		if(autoTransaction) transaction.commit();
 		
 	}
@@ -338,6 +337,7 @@ public class Mybernate implements InterfaceDAO {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List findAll(BaseModel model, String query, Session session) throws Exception {
 		
 		List result = null;
@@ -378,6 +378,7 @@ public class Mybernate implements InterfaceDAO {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List findAll(int page, int row, BaseModel model, String query, Session session) throws Exception {
 		
 		List result = null;

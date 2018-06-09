@@ -2,27 +2,20 @@ package gtt.model.setting;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import gtt.annotation.DbTable;
 import gtt.annotation.TableAttr;
 import gtt.model.*;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "Contest")
 @DbTable(name = "Contest")
 public class Contest extends BaseModel implements java.io.Serializable{
 	
 	// ATTRIBUTES :
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
-	
+
 	@Column(name = "description")
 	@TableAttr(name = "description")
 	private String description;
@@ -61,16 +54,6 @@ public class Contest extends BaseModel implements java.io.Serializable{
 
 	// GETTERS AND SETTERS :
 	
-	@Override public Integer getId() { return this.id; }
-
-	@Override 
-	public void setId(Integer id) throws ModelException {
-		if(id > 0)
-			this.id = id;
-		else
-			throw new ModelException("Invalid value on ID : " + id + " !");
-	}
-	
 	public String getDescription() {
 		return description;
 	}
@@ -108,24 +91,5 @@ public class Contest extends BaseModel implements java.io.Serializable{
 		return "Contest [description=" + description + ", finished=" + finished + ", dateBegin=" + dateBegin
 				+ ", dateEnd=" + dateEnd + ", id=" + id + "]";
 	}
-
-	@Override
-	public void copy(BaseModel toCopy) throws Exception {
-		
-		if(toCopy instanceof Contest) {
-			
-			Contest contest = (Contest) toCopy;
-			this.setId(contest.getId());
-			this.setDescription(contest.getDescription());
-			this.setFinished(contest.isFinished());
-			this.setDateBegin(contest.getDateBegin());
-			this.setDateEnd(contest.getDateEnd());
-			
-		} else throw new Exception("This model to copy is not instanciate with the correct class !");
-		
-	}
-	
-	
-	
 
 }

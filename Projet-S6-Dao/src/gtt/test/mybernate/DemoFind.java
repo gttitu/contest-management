@@ -13,7 +13,7 @@ public class DemoFind {
 			
 			//findById();
 			//findAll();
-			findAllWithPage();
+			//findAllWithPage();
 			
 		} catch(Exception ex) {
 			
