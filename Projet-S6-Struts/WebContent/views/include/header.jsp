@@ -52,6 +52,12 @@
                         <p>Candidate</p>
                     </a>
                 </li>
+                <li class="active">
+                    <a href="getMatters.action">
+                        <i class="pe-7s-graph"></i>
+                        <p>Matters</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

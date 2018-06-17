@@ -5,3 +5,7 @@
 .card-footer{
 	text-align: center;
 }
+
+#error{
+	color : #f00;
+}
