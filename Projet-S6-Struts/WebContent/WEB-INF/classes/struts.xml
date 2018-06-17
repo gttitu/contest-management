@@ -17,5 +17,8 @@
 			<result name="success">/views/candidate-save.jsp</result>
 			<result name="error">/views/error.jsp</result>
 		</action>
+		<action name="getMatters" class="gtt.controller.MatterAction" method="findMatters">
+			<result name="success">/views/matter-list.jsp</result>
+		</action>
 	</package>
 </struts>
